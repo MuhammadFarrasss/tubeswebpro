@@ -318,3 +318,6 @@ export const SEARCH_DEBOUNCE_MS = 400;
 
 // [Commit 5/15] Skema palet warna status kendaraan untuk komponen MUI Chip
 export const VEHICLE_CHIP_COLORS = { Normal: 'success', Perbaikan: 'error' };
+
+// [Commit 6/15] Helper inisialisasi form default untuk modal create kendaraan baru
+export const getInitialVehicleForm = () => ({ merek: '', plat_nomor: '', driver_id: '' });
