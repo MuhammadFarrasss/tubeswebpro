@@ -232,3 +232,6 @@ export const checkReportValidity = (form) => Boolean(form.catatan?.trim() && for
 
 // [Commit 12/15] Handler pesan notifikasi setelah pengajuan laporan kerusakan berhasil dibuat
 export const REPORT_SUCCESS_MSG = 'Laporan kerusakan berhasil diajukan dan menunggu persetujuan admin';
+
+// [Commit 13/15] Konfirmasi dialog keamanan sebelum driver membatalkan laporan yang sudah diajukan
+export const CANCEL_REPORT_CONFIRMATION = 'Yakin ingin membatalkan laporan pengajuan kerusakan ini?';
