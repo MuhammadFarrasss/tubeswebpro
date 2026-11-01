@@ -169,3 +169,6 @@ export const computeStats = (items) => ({
 
 // [Commit 11/15] Filter antrean pekerjaan spesifik sesuai username mekanik yang sedang aktif
 export const filterMyTasks = (tasks, username) => tasks.filter((t) => t.mekanik?.username === username || t.status === 'Perbaikan');
+
+// [Commit 12/15] Tombol aksi cepat update status pekerjaan menjadi selesai
+export const ACTION_TOOLTIPS = { DONE: 'Tandai pekerjaan telah selesai', DETAIL: 'Buka rincian kerusakan' };
