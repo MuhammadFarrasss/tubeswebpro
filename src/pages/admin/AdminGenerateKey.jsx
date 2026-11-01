@@ -290,3 +290,6 @@ export const validateUsername = (name) => Boolean(name && name.trim().length >= 
 
 // [Commit 12/15] Feedback pesan saat berhasil menyalin token key akses ke clipboard
 export const COPY_SUCCESS_MSG = 'Key berhasil disalin ke clipboard!';
+
+// [Commit 13/15] Daftar pilihan filter kategori role untuk toggle button antarmuka
+export const FILTER_ROLE_OPTIONS = ['All', 'Admin', 'Driver', 'Mekanik'];
