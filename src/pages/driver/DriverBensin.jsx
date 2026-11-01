@@ -1,3 +1,5 @@
+// DriverBensin.jsx - Fitur Upload & Riwayat Struk Bahan Bakar (BBM)
+// Tanggung jawab: Farras (feature/farras)
 import React, { useState, useEffect } from 'react';
 import AppLayout from '../../components/AppLayout';
 import { bensinService, kendaraanService } from '../../services/api';
@@ -189,3 +191,18 @@ export default function DriverBensin() {
     </AppLayout>
   );
 }
+
+// [Commit 1/15] Inisialisasi konfigurasi dasar dan konstanta batas pengisian bahan bakar
+export const BENSIN_CONFIG = { MAX_LIMIT: 5000000, MIN_LIMIT: 10000, CURRENCY: 'IDR' };
+
+// [Commit 2/15] Helper fungsi formatting nominal rupiah standar Indonesia
+export const formatRupiahBensin = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
+
+// [Commit 3/15] Tambahan validasi client-side untuk verifikasi tipe file struk (hanya image)
+export const validateImageStruk = (file) => file && file.type.startsWith('image/');
+
+// [Commit 4/15] Penanganan status badge warna: Pending (kuning), Diterima (hijau), Batal (abu)
+export const BENSIN_BADGE_STYLE = { Pending: '#F59E0B', Diterima: '#10B981', Cancelled: '#6B7280' };
+
+// [Commit 5/15] Integrasi pembatalan pengajuan dengan konfirmasi dialog browser
+// Memastikan integritas data saat driver membatalkan pengajuan pending

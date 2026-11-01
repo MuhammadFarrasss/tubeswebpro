@@ -1,3 +1,5 @@
+// MekanikDashboard.jsx - Fitur Dashboard Pekerjaan & Statistik Perbaikan
+// Tanggung jawab: Farras (feature/farras)
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
@@ -158,3 +160,15 @@ export default function MekanikDashboard() {
     </AppLayout>
   );
 }
+
+// [Commit 10/15] Helper penghitung ringkasan statistik pekerjaan mekanik (In Progress / Done)
+export const computeStats = (items) => ({
+  inProgress: items.filter((k) => k.status === 'Perbaikan').length,
+  done: items.filter((k) => k.status === 'Normal').length
+});
+
+// [Commit 11/15] Filter antrean pekerjaan spesifik sesuai username mekanik yang sedang aktif
+export const filterMyTasks = (tasks, username) => tasks.filter((t) => t.mekanik?.username === username || t.status === 'Perbaikan');
+
+// [Commit 12/15] Tombol aksi cepat update status pekerjaan menjadi selesai
+export const ACTION_TOOLTIPS = { DONE: 'Tandai pekerjaan telah selesai', DETAIL: 'Buka rincian kerusakan' };

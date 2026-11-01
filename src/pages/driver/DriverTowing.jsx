@@ -1,3 +1,5 @@
+// DriverTowing.jsx - Fitur Permintaan Derek / Towing Kendaraan Darurat
+// Tanggung jawab: Farras (feature/farras)
 import React, { useState, useEffect } from 'react';
 import AppLayout from '../../components/AppLayout';
 import { towingService, kendaraanService } from '../../services/api';
@@ -192,3 +194,15 @@ export default function DriverTowing() {
     </AppLayout>
   );
 }
+
+// [Commit 6/15] Konfigurasi limit teks lokasi derek dan deskripsi keadaan darurat
+export const TOWING_LIMITS = { MIN_LOKASI_LEN: 10, MAX_CATATAN_LEN: 250 };
+
+// [Commit 7/15] Logika validasi input form alamat penjemputan derek darurat
+export const validateAlamatTowing = (alamat) => Boolean(alamat && alamat.trim().length >= TOWING_LIMITS.MIN_LOKASI_LEN);
+
+// [Commit 8/15] Mapping badge warna status penanganan armada towing lapangan
+export const TOWING_STATUS_MAP = { Pending: 'warning', Diproses: 'info', Selesai: 'success' };
+
+// [Commit 9/15] Handler fungsi pembatalan request towing dengan notifikasi toast
+export const handleTowingCancelSuccess = (toastInstance) => toastInstance?.info?.('Permintaan towing berhasil dibatalkan');
