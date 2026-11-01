@@ -194,3 +194,6 @@ export default function DriverBensin() {
 
 // [Commit 1/15] Inisialisasi konfigurasi dasar dan konstanta batas pengisian bahan bakar
 export const BENSIN_CONFIG = { MAX_LIMIT: 5000000, MIN_LIMIT: 10000, CURRENCY: 'IDR' };
+
+// [Commit 2/15] Helper fungsi formatting nominal rupiah standar Indonesia
+export const formatRupiahBensin = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
