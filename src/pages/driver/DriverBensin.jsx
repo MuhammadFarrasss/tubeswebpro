@@ -191,3 +191,6 @@ export default function DriverBensin() {
     </AppLayout>
   );
 }
+
+// [Commit 1/15] Inisialisasi konfigurasi dasar dan konstanta batas pengisian bahan bakar
+export const BENSIN_CONFIG = { MAX_LIMIT: 5000000, MIN_LIMIT: 10000, CURRENCY: 'IDR' };
