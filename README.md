@@ -1,0 +1,172 @@
+# 🚗 Sagara Daily Checkup
+
+Sistem manajemen kendaraan harian berbasis web untuk pengelolaan operasional kendaraan, driver, dan mekanik.
+
+> **Tugas Besar UTS – Web Programming | Kelompok Sagara**
+
+---
+
+## 📸 Screenshots
+
+| Halaman | Deskripsi |
+|---------|-----------|
+| Landing Page | Pilih role login (Admin / Driver / Mekanik) |
+| Login | Autentikasi per role dengan validasi form |
+| Admin Dashboard | Statistik sistem, chart perbaikan, aktivitas terbaru |
+| Admin Kendaraan | CRUD data kendaraan + pencarian |
+| Admin Generate Key | Manajemen user & key akses |
+| Admin Pengajuan Perbaikan | Approve/assign mekanik ke pengajuan |
+| Admin Laporan Biaya | Rekap bill perbaikan |
+| Driver Dashboard | Status kendaraan & menu cepat |
+| Driver Laporan Kerusakan | Buat & lihat laporan kerusakan |
+| Driver Struk Bensin | Upload & manage struk BBM |
+| Driver Request Towing | Ajukan permintaan derek |
+| Mekanik Dashboard | Daftar pekerjaan perbaikan |
+| Mekanik Detail Kerusakan | Detail + submit bill perbaikan |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Teknologi |
+|-------|-----------|
+| **Framework** | React 19 + Vite |
+| **Routing** | React Router DOM v7 |
+| **UI Library** | Material UI (MUI) v9 |
+| **HTTP Client** | Axios + Mock Fetch |
+| **Charts** | Recharts |
+| **Notifications** | React Toastify |
+| **Styling** | MUI + Custom CSS (Flexbox, Grid, Media Queries) |
+| **State** | React Context API + useState/useEffect |
+| **Linter** | Oxlint |
+
+---
+
+## 📁 Struktur Folder
+
+```
+src/
+├── components/
+│   ├── AppLayout.jsx       # Sidebar + AppBar layout (responsive)
+│   ├── ProtectedRoute.jsx  # Route guard berdasarkan role
+│   └── StateComponents.jsx # LoadingSkeleton, ErrorState, EmptyState
+├── contexts/
+│   └── AuthContext.jsx     # Global auth state (Context API)
+├── data/
+│   └── mockData.js         # Mock data (di-fetch via service layer)
+├── pages/
+│   ├── Landing.jsx         # Role selection page
+│   ├── LoginPage.jsx       # Login form (dengan validasi)
+│   ├── admin/
+│   │   ├── AdminDashboard.jsx
+│   │   ├── AdminKendaraan.jsx
+│   │   ├── AdminGenerateKey.jsx
+│   │   ├── AdminPengajuanPerbaikan.jsx
+│   │   └── AdminLaporanBiaya.jsx
+│   ├── driver/
+│   │   ├── DriverDashboard.jsx
+│   │   ├── DriverReport.jsx
+│   │   ├── DriverBensin.jsx
+│   │   └── DriverTowing.jsx
+│   └── mekanik/
+│       ├── MekanikDashboard.jsx
+│       └── MekanikDetailKerusakan.jsx
+├── services/
+│   └── api.js              # Service layer (semua data di-fetch)
+├── App.jsx                 # Routes + ProtectedRoute setup
+├── main.jsx                # Entry point + MUI Theme + ToastContainer
+└── index.css               # Global CSS, design tokens, animasi
+```
+
+---
+
+## 🚀 Setup & Menjalankan Proyek
+
+### Prerequisites
+- Node.js >= 18
+- npm >= 9
+
+### Instalasi
+
+```bash
+# Clone repository
+git clone https://github.com/[your-org]/sagara-fe.git
+cd sagara-fe
+
+# Install dependencies
+npm install
+
+# Jalankan development server
+npm run dev
+```
+
+Aplikasi akan berjalan di: **http://localhost:5173**
+
+### Build Production
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## 🔑 Akun Demo
+
+| Role | Username | Key |
+|------|----------|-----|
+| Admin | `admin_sagara` | `ADM12345` |
+| Driver | `budi_driver` | `DRV98765` |
+| Driver | `andi_driver` | `DRV11111` |
+| Mekanik | `rizki_mekanik` | `MEK22222` |
+| Mekanik | `sani_mekanik` | `MEK33333` |
+
+---
+
+## ✅ Fitur & Spesifikasi
+
+### Halaman (13 halaman terkoneksi)
+- ✅ Landing page dengan role selector
+- ✅ Login page per role (Admin, Driver, Mekanik)
+- ✅ 5 halaman Admin (Dashboard, Kendaraan, Generate Key, Pengajuan Perbaikan, Laporan Biaya)
+- ✅ 4 halaman Driver (Dashboard, Laporan Kerusakan, Struk Bensin, Towing)
+- ✅ 2 halaman Mekanik (Dashboard, Detail Kerusakan)
+
+### Technical Requirements
+- ✅ React 19 + Vite (modern JS framework)
+- ✅ React Router DOM v7 (navigasi antar halaman)
+- ✅ Axios + Mock Fetch (semua data di-fetch, tidak hardcoded langsung di render)
+- ✅ Material UI v9 (modern CSS component library)
+- ✅ Custom CSS: Flexbox, Grid, Media Queries, CSS Variables
+- ✅ Responsive Design (mobile-first, breakpoints xs/sm/md/lg)
+- ✅ Semantic HTML5 (section, main, nav, article, ul/li, form, label)
+- ✅ Accessibility: aria-label, aria-current, aria-live, role="alert", keyboard navigation
+- ✅ Form validation client-side (login, tambah kendaraan, dll.)
+- ✅ Loading state (Skeleton, Spinner)
+- ✅ Error state (ErrorState component + try-catch di semua fetch)
+- ✅ Empty state (EmptyState component)
+- ✅ Protected routes berdasarkan role
+- ✅ Toast notifications (react-toastify)
+- ✅ Context API untuk global auth state
+- ✅ Recharts untuk visualisasi data
+
+---
+
+## 👥 Kontribusi Tim
+
+| Anggota | Branch | Tanggung Jawab |
+|---------|--------|----------------|
+| Reza | `feature/reza` | Landing Page + Login Page + Auth System |
+| Nadya | `feature/nadya` | Admin Dashboard + Chart + Recent Activities |
+| Bintang | `feature/bintang` | Admin Kendaraan + Admin Generate Key |
+| Delvin | `feature/delvin` | Admin Pengajuan Perbaikan + Admin Laporan Biaya |
+| Duhan | `feature/duhan` | Driver Dashboard + Driver Laporan Kerusakan |
+| Farras | `feature/farras` | Driver Struk Bensin + Driver Towing + Mekanik Dashboard + Mekanik Detail Kerusakan |
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dibuat untuk keperluan akademik — Tugas Besar UTS Web Programming.
+
+© 2025 Kelompok Sagara
