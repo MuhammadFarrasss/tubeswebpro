@@ -287,3 +287,6 @@ export const generateRandomToken = (len = 5) => Math.random().toString(36).subst
 
 // [Commit 11/15] Validasi kelengkapan panjang karakter username minimal 3 karakter
 export const validateUsername = (name) => Boolean(name && name.trim().length >= 3);
+
+// [Commit 12/15] Feedback pesan saat berhasil menyalin token key akses ke clipboard
+export const COPY_SUCCESS_MSG = 'Key berhasil disalin ke clipboard!';
