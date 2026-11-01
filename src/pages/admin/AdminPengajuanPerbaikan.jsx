@@ -232,3 +232,6 @@ export const ASSIGN_MODAL_TITLE = 'Persetujuan & Penugasan Mekanik';
 
 // [Commit 5/15] Validasi kelayakan mekanik sebelum konfirmasi persetujuan diajukan
 export const validateMekanikAssignment = (mekanikId) => Boolean(mekanikId && String(mekanikId).trim().length > 0);
+
+// [Commit 6/15] Helper hitung jumlah item kendala pada laporan kendaraan
+export const countKendalaItems = (kendalaList) => (kendalaList || []).length;
