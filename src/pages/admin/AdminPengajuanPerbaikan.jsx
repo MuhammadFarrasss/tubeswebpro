@@ -216,3 +216,10 @@ export default function AdminPengajuanPerbaikan() {
 
 // [Commit 1/15] Konstanta filter tab pengajuan kerusakan armada bengkel
 export const PERBAIKAN_TABS = ['Semua', 'Pending', 'Perbaikan', 'Normal'];
+
+// [Commit 2/15] Pemetaan label status verifikasi laporan dan warna indikator alert
+export const PERBAIKAN_STATUS_META = {
+  Pending: { label: 'Menunggu Persetujuan', severity: 'warning' },
+  Perbaikan: { label: 'Dalam Pengerjaan', severity: 'error' },
+  Normal: { label: 'Selesai Diperbaiki', severity: 'success' }
+};
