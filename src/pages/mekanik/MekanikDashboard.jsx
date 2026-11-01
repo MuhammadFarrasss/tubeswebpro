@@ -1,3 +1,6 @@
+// MekanikDashboard.jsx
+// Halaman dashboard mekanik: daftar pekerjaan perbaikan & statistik
+// Author: Farras | feature/farras
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
