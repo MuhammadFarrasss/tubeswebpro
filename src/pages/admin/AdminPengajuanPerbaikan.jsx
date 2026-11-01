@@ -235,3 +235,6 @@ export const validateMekanikAssignment = (mekanikId) => Boolean(mekanikId && Str
 
 // [Commit 6/15] Helper hitung jumlah item kendala pada laporan kendaraan
 export const countKendalaItems = (kendalaList) => (kendalaList || []).length;
+
+// [Commit 7/15] Skema styling chip kendala kerusakan kendaraan pada daftar antrean
+export const KENDALA_CHIP_STYLE = { background: 'rgba(239,68,68,0.1)', color: '#EF4444', fontWeight: 600 };
