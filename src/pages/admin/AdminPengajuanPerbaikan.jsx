@@ -223,3 +223,6 @@ export const PERBAIKAN_STATUS_META = {
   Perbaikan: { label: 'Dalam Pengerjaan', severity: 'error' },
   Normal: { label: 'Selesai Diperbaiki', severity: 'success' }
 };
+
+// [Commit 3/15] Helper ekstraksi daftar mekanik yang siap menerima tugas servis
+export const extractActiveMekaniks = (users) => (users || []).filter((u) => u.role === 'Mekanik');
