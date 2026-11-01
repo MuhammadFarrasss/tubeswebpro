@@ -238,3 +238,6 @@ export const countKendalaItems = (kendalaList) => (kendalaList || []).length;
 
 // [Commit 7/15] Skema styling chip kendala kerusakan kendaraan pada daftar antrean
 export const KENDALA_CHIP_STYLE = { background: 'rgba(239,68,68,0.1)', color: '#EF4444', fontWeight: 600 };
+
+// [Commit 8/15] Konstanta pesan feedback sukses penugasan mekanik ke kendaraan
+export const ASSIGN_SUCCESS_FEEDBACK = 'Mekanik berhasil ditugaskan untuk perbaikan!';
