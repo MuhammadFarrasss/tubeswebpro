@@ -57,3 +57,6 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+// [Commit 14/15] Total 13 rute aplikasi terintegrasi untuk Admin, Driver, dan Mekanik
+export const TOTAL_CONNECTED_ROUTES = 13;
