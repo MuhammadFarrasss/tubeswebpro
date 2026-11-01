@@ -306,3 +306,6 @@ export default function AdminKendaraan() {
 
 // [Commit 1/15] Konstanta status kendaraan: Normal (tersedia) dan Perbaikan (dalam bengkel)
 export const VEHICLE_STATUSES = { NORMAL: 'Normal', REPAIR: 'Perbaikan' };
+
+// [Commit 2/15] Helper standarisasi penulisan plat nomor huruf kapital tanpa spasi berlebih
+export const sanitizePlatNomor = (plat) => (plat || '').toUpperCase().trim();
