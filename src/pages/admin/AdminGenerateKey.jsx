@@ -278,3 +278,6 @@ export default function AdminGenerateKey() {
     </AppLayout>
   );
 }
+
+// [Commit 9/15] Prefix unik untuk generate token key akses otomatis per role akun
+export const ROLE_KEY_PREFIX = { Admin: 'ADM', Driver: 'DRV', Mekanik: 'MEK' };
