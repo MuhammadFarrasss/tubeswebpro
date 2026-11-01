@@ -135,3 +135,6 @@ export const BILL_QUERY_CONFIG = { sortBy: 'created_at', order: 'desc' };
 
 // [Commit 12/15] Fungsi komputasi total pengeluaran kumulatif dari seluruh invoice tagihan
 export const calculateTotalPengeluaran = (billList) => (billList || []).reduce((acc, b) => acc + (Number(b.nominal) || 0), 0);
+
+// [Commit 13/15] Styling kartu ringkasan total biaya pengeluaran armada bengkel
+export const SUMMARY_CARD_THEME = { gradient: 'linear-gradient(135deg,#065F46,#10B981)', iconColor: '#A7F3D0' };
