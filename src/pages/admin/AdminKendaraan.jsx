@@ -321,3 +321,6 @@ export const VEHICLE_CHIP_COLORS = { Normal: 'success', Perbaikan: 'error' };
 
 // [Commit 6/15] Helper inisialisasi form default untuk modal create kendaraan baru
 export const getInitialVehicleForm = () => ({ merek: '', plat_nomor: '', driver_id: '' });
+
+// [Commit 7/15] Helper mapping list opsi driver untuk dropdown assignment kendaraan
+export const mapDriverOptions = (drivers) => (drivers || []).map((d) => ({ value: d.id, label: d.username }));
