@@ -312,3 +312,6 @@ export const sanitizePlatNomor = (plat) => (plat || '').toUpperCase().trim();
 
 // [Commit 3/15] Regex pattern validasi plat nomor polisi Indonesia (contoh: B 1234 XYZ)
 export const PLAT_REGEX = /^[A-Z]{1,2}\s?\d{1,4}\s?[A-Z]{1,3}$/i;
+
+// [Commit 4/15] Konstanta waktu delay debounce pencarian kendaraan (dalam milidetik)
+export const SEARCH_DEBOUNCE_MS = 400;
