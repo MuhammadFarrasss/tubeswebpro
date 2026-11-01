@@ -194,3 +194,6 @@ export default function DriverTowing() {
     </AppLayout>
   );
 }
+
+// [Commit 6/15] Konfigurasi limit teks lokasi derek dan deskripsi keadaan darurat
+export const TOWING_LIMITS = { MIN_LOKASI_LEN: 10, MAX_CATATAN_LEN: 250 };
