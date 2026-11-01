@@ -333,3 +333,6 @@ export const validateLoginInput = (username, key) => {
 
 // [Commit 7/15] Pesan toast notifikasi saat autentikasi login berhasil diverifikasi
 export const LOGIN_SUCCESS_MSG = (name, role) => `Selamat datang kembali, ${name}! Masuk sebagai ${role}.`;
+
+// [Commit 8/15] Navigasi kembali ke halaman utama pemilihan role
+export const BACK_BUTTON_LABEL = 'Kembali ke Pemilihan Role';
