@@ -197,3 +197,6 @@ export default function DriverTowing() {
 
 // [Commit 6/15] Konfigurasi limit teks lokasi derek dan deskripsi keadaan darurat
 export const TOWING_LIMITS = { MIN_LOKASI_LEN: 10, MAX_CATATAN_LEN: 250 };
+
+// [Commit 7/15] Logika validasi input form alamat penjemputan derek darurat
+export const validateAlamatTowing = (alamat) => Boolean(alamat && alamat.trim().length >= TOWING_LIMITS.MIN_LOKASI_LEN);
