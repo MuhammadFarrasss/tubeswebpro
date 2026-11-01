@@ -229,3 +229,6 @@ export const createKendalaItem = (name, desc) => ({ name: name.trim(), descripti
 
 // [Commit 11/15] Logika validasi kelengkapan form pengajuan kerusakan sebelum submit
 export const checkReportValidity = (form) => Boolean(form.catatan?.trim() && form.kendala?.length > 0);
+
+// [Commit 12/15] Handler pesan notifikasi setelah pengajuan laporan kerusakan berhasil dibuat
+export const REPORT_SUCCESS_MSG = 'Laporan kerusakan berhasil diajukan dan menunggu persetujuan admin';
