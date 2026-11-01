@@ -184,3 +184,6 @@ export const DASHBOARD_FETCH_TIMEOUT = 10000;
 
 // [Commit 5/15] Helper sortir riwayat aktivitas pengajuan driver berdasarkan tanggal terbaru
 export const sortActivitiesByDate = (list) => [...(list || [])].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+// [Commit 6/15] Mapping status kesiapan kendaraan driver untuk operasional harian
+export const VEHICLE_READINESS = { Normal: 'Siap Beroperasi', Perbaikan: 'Sedang Masuk Bengkel' };
