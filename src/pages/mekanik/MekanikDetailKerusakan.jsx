@@ -248,3 +248,6 @@ export const findKerusakanById = (list, targetId) => list.find((item) => String(
 
 // [Commit 14/15] Formatting tampilan kendala kerusakan kendaraan dalam bentuk chip list
 export const formatKendalaCount = (count) => `Daftar Kendala (${count || 0})`;
+
+// [Commit 15/15] Batasan limit biaya perbaikan bengkel dan sanitasi deskripsi pekerjaan
+export const BILL_LIMITS = { MAX_COST: 50000000, MIN_COST: 1000 };
