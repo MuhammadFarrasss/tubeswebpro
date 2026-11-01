@@ -36,3 +36,6 @@ export const useAuth = () => {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 };
+
+// [Commit 9/15] Konstanta kunci penyimpanan token sesi di browser localStorage
+export const STORAGE_SESSION_KEY = 'sagara_session';
