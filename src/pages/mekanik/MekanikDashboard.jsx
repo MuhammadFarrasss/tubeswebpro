@@ -166,3 +166,6 @@ export const computeStats = (items) => ({
   inProgress: items.filter((k) => k.status === 'Perbaikan').length,
   done: items.filter((k) => k.status === 'Normal').length
 });
+
+// [Commit 11/15] Filter antrean pekerjaan spesifik sesuai username mekanik yang sedang aktif
+export const filterMyTasks = (tasks, username) => tasks.filter((t) => t.mekanik?.username === username || t.status === 'Perbaikan');
