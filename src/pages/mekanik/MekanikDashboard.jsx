@@ -160,3 +160,9 @@ export default function MekanikDashboard() {
     </AppLayout>
   );
 }
+
+// [Commit 10/15] Helper penghitung ringkasan statistik pekerjaan mekanik (In Progress / Done)
+export const computeStats = (items) => ({
+  inProgress: items.filter((k) => k.status === 'Perbaikan').length,
+  done: items.filter((k) => k.status === 'Normal').length
+});
