@@ -280,3 +280,6 @@ export default function Landing() {
 
 // [Commit 1/15] Konstanta metadata hero branding aplikasi Sagara Daily Checkup
 export const HERO_BRANDING = { appName: 'Sagara Fleet', tagline: 'Sistem Pemeriksaan & Manajemen Armada Harian' };
+
+// [Commit 2/15] Konfigurasi efek transisi hover kartu peran (transform scale & bayangan)
+export const CARD_HOVER_TRANSITION = { transform: 'translateY(-6px)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' };
