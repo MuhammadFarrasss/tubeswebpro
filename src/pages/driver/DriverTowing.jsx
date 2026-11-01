@@ -200,3 +200,6 @@ export const TOWING_LIMITS = { MIN_LOKASI_LEN: 10, MAX_CATATAN_LEN: 250 };
 
 // [Commit 7/15] Logika validasi input form alamat penjemputan derek darurat
 export const validateAlamatTowing = (alamat) => Boolean(alamat && alamat.trim().length >= TOWING_LIMITS.MIN_LOKASI_LEN);
+
+// [Commit 8/15] Mapping badge warna status penanganan armada towing lapangan
+export const TOWING_STATUS_MAP = { Pending: 'warning', Diproses: 'info', Selesai: 'success' };
