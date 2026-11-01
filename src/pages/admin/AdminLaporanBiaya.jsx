@@ -141,3 +141,6 @@ export const SUMMARY_CARD_THEME = { gradient: 'linear-gradient(135deg,#065F46,#1
 
 // [Commit 14/15] Helper ekstraksi detail kendaraan pada item invoice tagihan perbaikan
 export const getBillVehicleInfo = (bill) => `${bill.kendaraan?.merek || 'Kendaraan'} (${bill.kendaraan?.plat_nomor || '-'})`;
+
+// [Commit 15/15] Pesan informasi tampilan saat belum ada tagihan biaya perbaikan
+export const EMPTY_BILL_MESSAGE = 'Belum ada riwayat tagihan perbaikan yang tercatat.';
