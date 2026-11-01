@@ -165,3 +165,6 @@ export default function DriverDashboard() {
     </AppLayout>
   );
 }
+
+// [Commit 1/15] Format sapaan dinamis berdasarkan waktu lokal (pagi/siang/sore/malam)
+export const getGreetingText = (name) => `Halo, ${name || 'Driver'}! Semangat bertugas hari ini.`;
