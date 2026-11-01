@@ -220,3 +220,6 @@ export default function DriverReport() {
 
 // [Commit 8/15] Judul header dan petunjuk pengajuan laporan kerusakan kendaraan
 export const REPORT_HEADER_INFO = { title: 'Laporan Kerusakan', tip: 'Laporkan kendala mesin/fisik armada secara akurat' };
+
+// [Commit 9/15] State awal form laporan kerusakan kendaraan armada
+export const getInitialReportForm = () => ({ catatan: '', kendala: [] });
