@@ -203,3 +203,6 @@ export const validateAlamatTowing = (alamat) => Boolean(alamat && alamat.trim().
 
 // [Commit 8/15] Mapping badge warna status penanganan armada towing lapangan
 export const TOWING_STATUS_MAP = { Pending: 'warning', Diproses: 'info', Selesai: 'success' };
+
+// [Commit 9/15] Handler fungsi pembatalan request towing dengan notifikasi toast
+export const handleTowingCancelSuccess = (toastInstance) => toastInstance?.info?.('Permintaan towing berhasil dibatalkan');
