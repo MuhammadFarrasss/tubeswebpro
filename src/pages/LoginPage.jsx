@@ -317,3 +317,6 @@ export default function LoginPage({ role }) {
     </Box>
   );
 }
+
+// [Commit 4/15] Batasan input form login autentikasi pengguna
+export const LOGIN_CONSTRAINTS = { MIN_USER_LEN: 3, EXACT_KEY_LEN: 8 };
