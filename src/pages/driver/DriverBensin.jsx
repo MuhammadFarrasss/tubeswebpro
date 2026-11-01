@@ -200,3 +200,6 @@ export const formatRupiahBensin = (val) => new Intl.NumberFormat('id-ID', { styl
 
 // [Commit 3/15] Tambahan validasi client-side untuk verifikasi tipe file struk (hanya image)
 export const validateImageStruk = (file) => file && file.type.startsWith('image/');
+
+// [Commit 4/15] Penanganan status badge warna: Pending (kuning), Diterima (hijau), Batal (abu)
+export const BENSIN_BADGE_STYLE = { Pending: '#F59E0B', Diterima: '#10B981', Cancelled: '#6B7280' };
