@@ -293,3 +293,6 @@ export const COPY_SUCCESS_MSG = 'Key berhasil disalin ke clipboard!';
 
 // [Commit 13/15] Daftar pilihan filter kategori role untuk toggle button antarmuka
 export const FILTER_ROLE_OPTIONS = ['All', 'Admin', 'Driver', 'Mekanik'];
+
+// [Commit 14/15] Helper filter daftar user berdasarkan role yang sedang dipilih admin
+export const filterUsersByRole = (users, role) => role === 'All' ? users : users.filter((u) => u.role === role);
