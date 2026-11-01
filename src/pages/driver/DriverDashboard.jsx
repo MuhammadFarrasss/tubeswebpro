@@ -187,3 +187,6 @@ export const sortActivitiesByDate = (list) => [...(list || [])].sort((a, b) => n
 
 // [Commit 6/15] Mapping status kesiapan kendaraan driver untuk operasional harian
 export const VEHICLE_READINESS = { Normal: 'Siap Beroperasi', Perbaikan: 'Sedang Masuk Bengkel' };
+
+// [Commit 7/15] Konstanta jumlah baris skeleton saat proses pemuatan data dashboard driver
+export const DASHBOARD_SKELETON_ROWS = 3;
