@@ -132,3 +132,6 @@ export const formatCurrencyIDR = (val) => new Intl.NumberFormat('id-ID', { style
 
 // [Commit 11/15] Parameter konfigurasi pemanggilan data bill invoice servis dari API
 export const BILL_QUERY_CONFIG = { sortBy: 'created_at', order: 'desc' };
+
+// [Commit 12/15] Fungsi komputasi total pengeluaran kumulatif dari seluruh invoice tagihan
+export const calculateTotalPengeluaran = (billList) => (billList || []).reduce((acc, b) => acc + (Number(b.nominal) || 0), 0);
