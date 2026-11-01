@@ -126,3 +126,6 @@ export default function AdminLaporanBiaya() {
 
 // [Commit 9/15] Header judul dan subjudul modul laporan pengeluaran bengkel
 export const LAPORAN_HEADER = { title: 'Laporan Biaya Perbaikan', subtitle: 'Rekapitulasi total pengeluaran servis armada' };
+
+// [Commit 10/15] Helper format rupiah presisi tanpa digit desimal (akuntansi IDR)
+export const formatCurrencyIDR = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val || 0);
