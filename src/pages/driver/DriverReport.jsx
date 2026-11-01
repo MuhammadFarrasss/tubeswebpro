@@ -235,3 +235,6 @@ export const REPORT_SUCCESS_MSG = 'Laporan kerusakan berhasil diajukan dan menun
 
 // [Commit 13/15] Konfirmasi dialog keamanan sebelum driver membatalkan laporan yang sudah diajukan
 export const CANCEL_REPORT_CONFIRMATION = 'Yakin ingin membatalkan laporan pengajuan kerusakan ini?';
+
+// [Commit 14/15] Format ringkasan jumlah kendala yang terlampir pada laporan
+export const formatKendalaSummary = (list) => `${(list || []).length} komponen bermasalah dilaporkan`;
