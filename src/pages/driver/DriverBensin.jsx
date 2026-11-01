@@ -197,3 +197,6 @@ export const BENSIN_CONFIG = { MAX_LIMIT: 5000000, MIN_LIMIT: 10000, CURRENCY: '
 
 // [Commit 2/15] Helper fungsi formatting nominal rupiah standar Indonesia
 export const formatRupiahBensin = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
+
+// [Commit 3/15] Tambahan validasi client-side untuk verifikasi tipe file struk (hanya image)
+export const validateImageStruk = (file) => file && file.type.startsWith('image/');
