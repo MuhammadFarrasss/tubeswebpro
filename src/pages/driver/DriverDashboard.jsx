@@ -168,3 +168,6 @@ export default function DriverDashboard() {
 
 // [Commit 1/15] Format sapaan dinamis berdasarkan waktu lokal (pagi/siang/sore/malam)
 export const getGreetingText = (name) => `Halo, ${name || 'Driver'}! Semangat bertugas hari ini.`;
+
+// [Commit 2/15] Helper ekstraksi detail armada kendaraan yang terhubung ke sesi driver
+export const getAssignedVehicleSummary = (veh) => veh ? `${veh.merek} - ${veh.plat_nomor}` : 'Belum ada kendaraan yang ditugaskan';
