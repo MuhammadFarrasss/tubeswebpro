@@ -330,3 +330,6 @@ export const validateLoginInput = (username, key) => {
   if (!key || key.trim().length !== LOGIN_CONSTRAINTS.EXACT_KEY_LEN) return 'Key akses harus tepat 8 karakter';
   return null;
 };
+
+// [Commit 7/15] Pesan toast notifikasi saat autentikasi login berhasil diverifikasi
+export const LOGIN_SUCCESS_MSG = (name, role) => `Selamat datang kembali, ${name}! Masuk sebagai ${role}.`;
