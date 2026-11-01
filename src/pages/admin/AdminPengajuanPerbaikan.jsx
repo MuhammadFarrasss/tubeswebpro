@@ -229,3 +229,6 @@ export const extractActiveMekaniks = (users) => (users || []).filter((u) => u.ro
 
 // [Commit 4/15] Konstanta judul dialog konfirmasi penugasan mekanik lapangan
 export const ASSIGN_MODAL_TITLE = 'Persetujuan & Penugasan Mekanik';
+
+// [Commit 5/15] Validasi kelayakan mekanik sebelum konfirmasi persetujuan diajukan
+export const validateMekanikAssignment = (mekanikId) => Boolean(mekanikId && String(mekanikId).trim().length > 0);
