@@ -281,3 +281,6 @@ export default function AdminGenerateKey() {
 
 // [Commit 9/15] Prefix unik untuk generate token key akses otomatis per role akun
 export const ROLE_KEY_PREFIX = { Admin: 'ADM', Driver: 'DRV', Mekanik: 'MEK' };
+
+// [Commit 10/15] Fungsi pembantu pembuat string acak alfanumerik untuk token key akses
+export const generateRandomToken = (len = 5) => Math.random().toString(36).substring(2, 2 + len).toUpperCase();
