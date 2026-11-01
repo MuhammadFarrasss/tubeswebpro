@@ -283,3 +283,6 @@ export const HERO_BRANDING = { appName: 'Sagara Fleet', tagline: 'Sistem Pemerik
 
 // [Commit 2/15] Konfigurasi efek transisi hover kartu peran (transform scale & bayangan)
 export const CARD_HOVER_TRANSITION = { transform: 'translateY(-6px)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' };
+
+// [Commit 3/15] Helper path redirect otomatis jika user telah memiliki sesi aktif
+export const getRedirectPathByRole = (role) => `/${role.toLowerCase()}/dashboard`;
