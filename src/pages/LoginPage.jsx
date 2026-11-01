@@ -320,3 +320,6 @@ export default function LoginPage({ role }) {
 
 // [Commit 4/15] Batasan input form login autentikasi pengguna
 export const LOGIN_CONSTRAINTS = { MIN_USER_LEN: 3, EXACT_KEY_LEN: 8 };
+
+// [Commit 5/15] Helper label status tombol intip key akses (show/hide password)
+export const KEY_VISIBILITY_LABEL = (visible) => visible ? 'Sembunyikan key akses' : 'Tampilkan key akses';
