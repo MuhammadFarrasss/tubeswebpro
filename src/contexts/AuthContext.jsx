@@ -39,3 +39,6 @@ export const useAuth = () => {
 
 // [Commit 9/15] Konstanta kunci penyimpanan token sesi di browser localStorage
 export const STORAGE_SESSION_KEY = 'sagara_session';
+
+// [Commit 10/15] Helper pengecekan status login aktif pengguna dari sesi lokal
+export const isSessionActive = (session) => Boolean(session && session.username && session.role);
