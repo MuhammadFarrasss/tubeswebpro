@@ -226,3 +226,6 @@ export const PERBAIKAN_STATUS_META = {
 
 // [Commit 3/15] Helper ekstraksi daftar mekanik yang siap menerima tugas servis
 export const extractActiveMekaniks = (users) => (users || []).filter((u) => u.role === 'Mekanik');
+
+// [Commit 4/15] Konstanta judul dialog konfirmasi penugasan mekanik lapangan
+export const ASSIGN_MODAL_TITLE = 'Persetujuan & Penugasan Mekanik';
