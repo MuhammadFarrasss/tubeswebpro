@@ -129,3 +129,6 @@ export const LAPORAN_HEADER = { title: 'Laporan Biaya Perbaikan', subtitle: 'Rek
 
 // [Commit 10/15] Helper format rupiah presisi tanpa digit desimal (akuntansi IDR)
 export const formatCurrencyIDR = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val || 0);
+
+// [Commit 11/15] Parameter konfigurasi pemanggilan data bill invoice servis dari API
+export const BILL_QUERY_CONFIG = { sortBy: 'created_at', order: 'desc' };
