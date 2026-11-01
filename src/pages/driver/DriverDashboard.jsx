@@ -171,3 +171,10 @@ export const getGreetingText = (name) => `Halo, ${name || 'Driver'}! Semangat be
 
 // [Commit 2/15] Helper ekstraksi detail armada kendaraan yang terhubung ke sesi driver
 export const getAssignedVehicleSummary = (veh) => veh ? `${veh.merek} - ${veh.plat_nomor}` : 'Belum ada kendaraan yang ditugaskan';
+
+// [Commit 3/15] Konfigurasi daftar aksi cepat menu driver (kerusakan, bensin, towing)
+export const QUICK_ACTIONS = [
+  { label: 'Lapor Kerusakan', path: '/driver/laporan', color: '#EF4444' },
+  { label: 'Struk Bensin', path: '/driver/bensin', color: '#F59E0B' },
+  { label: 'Request Towing', path: '/driver/towing', color: '#3B82F6' },
+];
