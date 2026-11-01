@@ -226,3 +226,6 @@ export const getInitialReportForm = () => ({ catatan: '', kendala: [] });
 
 // [Commit 10/15] Helper pembuat objek kendala baru (nama komponen & rincian masalah)
 export const createKendalaItem = (name, desc) => ({ name: name.trim(), description: desc.trim() });
+
+// [Commit 11/15] Logika validasi kelengkapan form pengajuan kerusakan sebelum submit
+export const checkReportValidity = (form) => Boolean(form.catatan?.trim() && form.kendala?.length > 0);
