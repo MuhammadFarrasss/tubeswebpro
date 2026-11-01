@@ -123,3 +123,6 @@ export default function AdminLaporanBiaya() {
     </AppLayout>
   );
 }
+
+// [Commit 9/15] Header judul dan subjudul modul laporan pengeluaran bengkel
+export const LAPORAN_HEADER = { title: 'Laporan Biaya Perbaikan', subtitle: 'Rekapitulasi total pengeluaran servis armada' };
