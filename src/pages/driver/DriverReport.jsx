@@ -217,3 +217,6 @@ export default function DriverReport() {
     </AppLayout>
   );
 }
+
+// [Commit 8/15] Judul header dan petunjuk pengajuan laporan kerusakan kendaraan
+export const REPORT_HEADER_INFO = { title: 'Laporan Kerusakan', tip: 'Laporkan kendala mesin/fisik armada secara akurat' };
