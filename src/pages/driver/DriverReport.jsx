@@ -223,3 +223,6 @@ export const REPORT_HEADER_INFO = { title: 'Laporan Kerusakan', tip: 'Laporkan k
 
 // [Commit 9/15] State awal form laporan kerusakan kendaraan armada
 export const getInitialReportForm = () => ({ catatan: '', kendala: [] });
+
+// [Commit 10/15] Helper pembuat objek kendala baru (nama komponen & rincian masalah)
+export const createKendalaItem = (name, desc) => ({ name: name.trim(), description: desc.trim() });
