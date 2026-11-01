@@ -324,3 +324,6 @@ export const getInitialVehicleForm = () => ({ merek: '', plat_nomor: '', driver_
 
 // [Commit 7/15] Helper mapping list opsi driver untuk dropdown assignment kendaraan
 export const mapDriverOptions = (drivers) => (drivers || []).map((d) => ({ value: d.id, label: d.username }));
+
+// [Commit 8/15] Handler pesan konfirmasi sebelum menghapus unit armada dari sistem
+export const DELETE_CONFIRM_MSG = 'Apakah Anda yakin ingin menghapus data kendaraan ini?';
