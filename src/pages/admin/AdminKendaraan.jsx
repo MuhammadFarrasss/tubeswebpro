@@ -303,3 +303,6 @@ export default function AdminKendaraan() {
     </AppLayout>
   );
 }
+
+// [Commit 1/15] Konstanta status kendaraan: Normal (tersedia) dan Perbaikan (dalam bengkel)
+export const VEHICLE_STATUSES = { NORMAL: 'Normal', REPAIR: 'Perbaikan' };
