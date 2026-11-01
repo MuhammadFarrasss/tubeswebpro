@@ -1,3 +1,6 @@
+// MekanikDetailKerusakan.jsx
+// Halaman detail kerusakan kendaraan & form submit bill perbaikan
+// Author: Farras | feature/farras
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
