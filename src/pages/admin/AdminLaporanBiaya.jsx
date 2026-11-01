@@ -138,3 +138,6 @@ export const calculateTotalPengeluaran = (billList) => (billList || []).reduce((
 
 // [Commit 13/15] Styling kartu ringkasan total biaya pengeluaran armada bengkel
 export const SUMMARY_CARD_THEME = { gradient: 'linear-gradient(135deg,#065F46,#10B981)', iconColor: '#A7F3D0' };
+
+// [Commit 14/15] Helper ekstraksi detail kendaraan pada item invoice tagihan perbaikan
+export const getBillVehicleInfo = (bill) => `${bill.kendaraan?.merek || 'Kendaraan'} (${bill.kendaraan?.plat_nomor || '-'})`;
