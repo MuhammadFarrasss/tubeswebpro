@@ -296,3 +296,6 @@ export const FILTER_ROLE_OPTIONS = ['All', 'Admin', 'Driver', 'Mekanik'];
 
 // [Commit 14/15] Helper filter daftar user berdasarkan role yang sedang dipilih admin
 export const filterUsersByRole = (users, role) => role === 'All' ? users : users.filter((u) => u.role === role);
+
+// [Commit 15/15] Konstanta pesan konfirmasi pencabutan hak akses / hapus akun pengguna
+export const DELETE_USER_CONFIRM = 'Hapus akun user ini dari sistem? Key akses akan hangus.';
