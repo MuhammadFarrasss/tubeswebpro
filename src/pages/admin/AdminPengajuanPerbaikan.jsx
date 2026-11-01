@@ -213,3 +213,6 @@ export default function AdminPengajuanPerbaikan() {
     </AppLayout>
   );
 }
+
+// [Commit 1/15] Konstanta filter tab pengajuan kerusakan armada bengkel
+export const PERBAIKAN_TABS = ['Semua', 'Pending', 'Perbaikan', 'Normal'];
