@@ -245,3 +245,6 @@ export default function MekanikDetailKerusakan() {
 
 // [Commit 13/15] Helper query pencarian item kerusakan berdasarkan parameter ID URL
 export const findKerusakanById = (list, targetId) => list.find((item) => String(item.id) === String(targetId));
+
+// [Commit 14/15] Formatting tampilan kendala kerusakan kendaraan dalam bentuk chip list
+export const formatKendalaCount = (count) => `Daftar Kendala (${count || 0})`;
