@@ -238,3 +238,6 @@ export const CANCEL_REPORT_CONFIRMATION = 'Yakin ingin membatalkan laporan penga
 
 // [Commit 14/15] Format ringkasan jumlah kendala yang terlampir pada laporan
 export const formatKendalaSummary = (list) => `${(list || []).length} komponen bermasalah dilaporkan`;
+
+// [Commit 15/15] Opsi filter tab status riwayat pengajuan kerusakan untuk driver
+export const DRIVER_REPORT_STATUS_TABS = ['Semua', 'Pending', 'Perbaikan', 'Normal', 'Cancelled'];
