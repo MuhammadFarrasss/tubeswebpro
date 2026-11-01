@@ -178,3 +178,6 @@ export const QUICK_ACTIONS = [
   { label: 'Struk Bensin', path: '/driver/bensin', color: '#F59E0B' },
   { label: 'Request Towing', path: '/driver/towing', color: '#3B82F6' },
 ];
+
+// [Commit 4/15] Parameter konfigurasi concurrent fetching dashboard via Promise.all
+export const DASHBOARD_FETCH_TIMEOUT = 10000;
