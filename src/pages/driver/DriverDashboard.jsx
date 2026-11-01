@@ -181,3 +181,6 @@ export const QUICK_ACTIONS = [
 
 // [Commit 4/15] Parameter konfigurasi concurrent fetching dashboard via Promise.all
 export const DASHBOARD_FETCH_TIMEOUT = 10000;
+
+// [Commit 5/15] Helper sortir riwayat aktivitas pengajuan driver berdasarkan tanggal terbaru
+export const sortActivitiesByDate = (list) => [...(list || [])].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
