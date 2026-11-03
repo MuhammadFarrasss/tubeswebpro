@@ -210,3 +210,6 @@ export const DEFAULT_MOCK_DELAY_MS = 600;
 
 // [Commit 3/15] Helper wrapper penanganan error koneksi API service
 export const handleServiceError = (err) => err?.response?.data?.message || err?.message || 'Gagal memproses permintaan';
+
+// [Commit 4/15] Endpoint publik JSONPlaceholder untuk integrasi external API
+export const EXTERNAL_PUBLIC_API_URL = 'https://jsonplaceholder.typicode.com/posts';
