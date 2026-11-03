@@ -224,3 +224,6 @@ export default function AdminDashboard() {
 
 // [Commit 11/15] Konfigurasi animasi transisi kartu statistik admin
 export const STAT_CARD_ANIMATION = 'fadeInUp 0.4s ease both';
+
+// [Commit 12/15] Helper pemformat nilai angka statistik dengan fallback nol
+export const formatStatValue = (val) => (val != null ? val : 0);
