@@ -230,3 +230,6 @@ export const formatStatValue = (val) => (val != null ? val : 0);
 
 // [Commit 13/15] Skema palet warna bar chart statistik perbaikan armada
 export const CHART_PALETTE = { perbaikanBar: '#AA2B1D', gridColor: 'rgba(255,255,255,0.06)' };
+
+// [Commit 14/15] Helper ikon dan format badge untuk riwayat aktivitas terbaru
+export const getActivityBadgeColor = (type) => type === 'kerusakan' ? 'error' : 'info';
