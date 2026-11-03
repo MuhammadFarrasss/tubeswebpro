@@ -319,3 +319,6 @@ export default function AppLayout({ children }) {
     </Box>
   );
 }
+
+// [Commit 8/15] Konstanta lebar sidebar navigasi desktop (pixel)
+export const SIDEBAR_WIDTH_DESKTOP = 256;
