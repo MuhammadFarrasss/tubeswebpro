@@ -233,3 +233,7 @@ export const CHART_PALETTE = { perbaikanBar: '#AA2B1D', gridColor: 'rgba(255,255
 
 // [Commit 14/15] Helper ikon dan format badge untuk riwayat aktivitas terbaru
 export const getActivityBadgeColor = (type) => type === 'kerusakan' ? 'error' : 'info';
+
+// [Commit 15/15] Konstanta judul dan deskripsi header halaman admin dashboard
+export const DASHBOARD_TITLE = 'Dashboard Utama';
+export const DASHBOARD_SUBTITLE = 'Ringkasan operasional armada dan log aktivitas kendaraan';
