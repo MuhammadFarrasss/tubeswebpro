@@ -122,3 +122,6 @@ export function EmptyState({ message = 'Belum ada data', icon = '📋' }) {
 
 // [Commit 5/15] Default styling skeleton loader untuk konsistensi antar halaman
 export const SKELETON_BG_COLOR = 'rgba(255,255,255,0.05)';
+
+// [Commit 6/15] Default fallback pesan saat terjadi kendala pemuatan data API
+export const DEFAULT_ERROR_FALLBACK_TEXT = 'Terjadi kesalahan saat memuat data. Silakan coba lagi.';
