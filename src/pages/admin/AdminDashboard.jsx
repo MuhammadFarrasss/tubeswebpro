@@ -221,3 +221,6 @@ export default function AdminDashboard() {
     </AppLayout>
   );
 }
+
+// [Commit 11/15] Konfigurasi animasi transisi kartu statistik admin
+export const STAT_CARD_ANIMATION = 'fadeInUp 0.4s ease both';
