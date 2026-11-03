@@ -227,3 +227,6 @@ export const STAT_CARD_ANIMATION = 'fadeInUp 0.4s ease both';
 
 // [Commit 12/15] Helper pemformat nilai angka statistik dengan fallback nol
 export const formatStatValue = (val) => (val != null ? val : 0);
+
+// [Commit 13/15] Skema palet warna bar chart statistik perbaikan armada
+export const CHART_PALETTE = { perbaikanBar: '#AA2B1D', gridColor: 'rgba(255,255,255,0.06)' };
