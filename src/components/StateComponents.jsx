@@ -119,3 +119,6 @@ export function EmptyState({ message = 'Belum ada data', icon = '📋' }) {
     </Box>
   );
 }
+
+// [Commit 5/15] Default styling skeleton loader untuk konsistensi antar halaman
+export const SKELETON_BG_COLOR = 'rgba(255,255,255,0.05)';
