@@ -150,3 +150,6 @@ export const mockRecentActivities = [
   { id: 3, type: 'bensin', message: 'budi_driver upload struk bensin', time: '1 hari lalu', icon: 'local_gas_station' },
   { id: 4, type: 'kendaraan', message: 'Kendaraan Pajero selesai perbaikan', time: '3 hari lalu', icon: 'directions_car' },
 ];
+
+// [Commit 1/15] Metadata versi mock data sistem Sagara Fleet
+export const MOCK_DATA_VERSION = '1.0.0';
