@@ -204,3 +204,6 @@ export const externalApiService = {
     }
   },
 };
+
+// [Commit 2/15] Parameter konfigurasi default delay simulasi HTTP request
+export const DEFAULT_MOCK_DELAY_MS = 600;
