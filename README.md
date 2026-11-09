@@ -98,9 +98,15 @@ npm install
 
 # Jalankan development server
 npm run dev
+
+# Di terminal terpisah, jalankan API dummy kendaraan
+npm run api
 ```
 
 Aplikasi akan berjalan di: **http://localhost:5173**
+API dummy kendaraan berjalan di: **http://localhost:3001/api/kendaraans**. Data disimpan di `db.json`.
+
+Untuk konfigurasi lain, salin `.env.example` ke `.env` lalu ubah `VITE_API_BASE_URL` atau `VITE_API_TARGET` sesuai kebutuhan.
 
 ### Build Production
 

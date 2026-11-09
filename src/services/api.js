@@ -1,10 +1,20 @@
 // API service layer - semua fetch via axios sesuai spesifikasi
 import axios from 'axios';
 import {
-  mockUsers, mockKendaraans, mockKerusakans, mockBillPerbaikan,
+  mockUsers, mockKerusakans, mockBillPerbaikan,
   mockStruKBensin, mockTowings, mockDashboardStats, mockChartData,
   mockRecentActivities,
 } from '../data/mockData';
+
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  timeout: 10000,
+});
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => Promise.reject(new Error(error.response?.data?.message || error.message))
+);
 
 // Simulate network delay untuk realistic UX
 const delay = (ms = 600) => new Promise((res) => setTimeout(res, ms));
@@ -49,35 +59,10 @@ export const dashboardService = {
 };
 
 export const kendaraanService = {
-  getAll: (params = {}) => {
-    let data = [...mockKendaraans];
-    if (params.search) {
-      const q = params.search.toLowerCase();
-      data = data.filter(
-        (k) => k.merek.toLowerCase().includes(q) || k.plat_nomor.toLowerCase().includes(q)
-      );
-    }
-    return mockFetch(data);
-  },
-  create: async (payload) => {
-    await delay(700);
-    const newItem = { ...payload, id: Date.now(), status: 'Normal', created_at: new Date().toISOString() };
-    mockKendaraans.push(newItem);
-    return { data: newItem, status: 201 };
-  },
-  update: async (id, payload) => {
-    await delay(700);
-    const idx = mockKendaraans.findIndex((k) => k.id === id);
-    if (idx === -1) throw new Error('Kendaraan tidak ditemukan');
-    mockKendaraans[idx] = { ...mockKendaraans[idx], ...payload };
-    return { data: mockKendaraans[idx], status: 200 };
-  },
-  remove: async (id) => {
-    await delay(600);
-    const idx = mockKendaraans.findIndex((k) => k.id === id);
-    if (idx !== -1) mockKendaraans.splice(idx, 1);
-    return { data: { message: 'Deleted' }, status: 200 };
-  },
+  getAll: (params = {}) => apiClient.get('/kendaraans', { params }),
+  create: (payload) => apiClient.post('/kendaraans', payload),
+  update: (id, payload) => apiClient.put(`/kendaraans/${id}`, payload),
+  remove: (id) => apiClient.delete(`/kendaraans/${id}`),
 };
 
 export const userService = {

@@ -1,0 +1,66 @@
+{
+  "users": [
+    {
+      "id": 2,
+      "username": "budi_driver",
+      "role": "Driver"
+    },
+    {
+      "id": 3,
+      "username": "andi_driver",
+      "role": "Driver"
+    },
+    {
+      "id": 6,
+      "username": "deni_driver",
+      "role": "Driver"
+    }
+  ],
+  "kendaraans": [
+    {
+      "id": 1,
+      "merek": "Toyota Avanza",
+      "plat_nomor": "B 1234 XYZ",
+      "status": "Normal",
+      "driver_id": 2,
+      "gambar": null,
+      "created_at": "2025-01-20"
+    },
+    {
+      "id": 2,
+      "merek": "Honda HRV",
+      "plat_nomor": "D 5678 ABC",
+      "status": "Perbaikan",
+      "driver_id": 3,
+      "gambar": null,
+      "created_at": "2025-01-22"
+    },
+    {
+      "id": 3,
+      "merek": "Mitsubishi Pajero",
+      "plat_nomor": "B 9012 DEF",
+      "status": "Normal",
+      "driver_id": 6,
+      "gambar": null,
+      "created_at": "2025-01-25"
+    },
+    {
+      "id": 4,
+      "merek": "Isuzu Panther",
+      "plat_nomor": "F 3456 GHI",
+      "status": "Normal",
+      "driver_id": null,
+      "gambar": null,
+      "created_at": "2025-02-01"
+    },
+    {
+      "id": 5,
+      "merek": "Daihatsu",
+      "plat_nomor": "B 4567 AAW",
+      "status": "Normal",
+      "driver_id": 2,
+      "gambar": null,
+      "created_at": "2026-11-09T04:13:07.752Z"
+    }
+  ]
+}
