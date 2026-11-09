@@ -38,7 +38,7 @@ export default function AdminPengajuanPerbaikan() {
       ]);
       setKerusakans(k.data);
       setMekaniks(m.data);
-    } catch { setError('Gagal memuat data'); }
+    } catch (err) { setError(err.message || 'Gagal memuat data pengajuan'); }
     finally { setLoading(false); }
   };
 

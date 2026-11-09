@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import {
-  Box, Typography, TextField, Button, InputAdornment,
-  IconButton, Alert, CircularProgress, Card,
-} from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
-import KeyIcon from '@mui/icons-material/Key';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import { Box, Button } from '@mui/material';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import BuildIcon from '@mui/icons-material/Build';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { toast } from 'react-toastify';
+import LoginCard from './LoginCard';
 
 const roleConfig = {
   Admin: {
@@ -39,7 +33,6 @@ const roleConfig = {
   },
 };
 
-// Client-side form validation
 function validate(username, key) {
   const errors = {};
   if (!username.trim()) {
@@ -59,7 +52,6 @@ export default function LoginPage({ role }) {
   const { login, user } = useAuth();
   const navigate = useNavigate();
   const config = roleConfig[role];
-
   const [username, setUsername] = useState('');
   const [key, setKey] = useState('');
   const [showKey, setShowKey] = useState(false);
@@ -67,7 +59,6 @@ export default function LoginPage({ role }) {
   const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Redirect if already logged in
   useEffect(() => {
     if (user) {
       const map = { Admin: '/admin/dashboard', Driver: '/driver/dashboard', Mekanik: '/mekanik/dashboard' };
@@ -79,7 +70,6 @@ export default function LoginPage({ role }) {
     e.preventDefault();
     setApiError('');
 
-    // Client-side validation
     const validationErrors = validate(username, key);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -99,6 +89,16 @@ export default function LoginPage({ role }) {
     }
   };
 
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    setErrors((previous) => ({ ...previous, username: '' }));
+  };
+
+  const handleKeyChange = (e) => {
+    setKey(e.target.value.toUpperCase());
+    setErrors((previous) => ({ ...previous, key: '' }));
+  };
+
   return (
     <Box
       component="main"
@@ -112,7 +112,6 @@ export default function LoginPage({ role }) {
         py: 4,
       }}
     >
-      {/* Back button */}
       <Box sx={{ position: 'absolute', top: { xs: 16, md: 32 }, left: { xs: 16, md: 32 } }}>
         <Button
           startIcon={<ArrowBackIcon />}
@@ -124,196 +123,21 @@ export default function LoginPage({ role }) {
         </Button>
       </Box>
 
-      <Card
-        className="animate-fadeInUp"
-        sx={{
-          width: '100%',
-          maxWidth: 440,
-          background: 'rgba(13,17,23,0.9)',
-          backdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: 'var(--radius-xl)',
-          p: { xs: 3, sm: 4 },
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Top gradient accent */}
-        <Box
-          aria-hidden="true"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 3,
-            background: config.gradient,
-          }}
-        />
-
-        {/* Header */}
-        <Box textAlign="center" mb={4}>
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: '18px',
-              background: config.gradient,
-              boxShadow: `0 12px 32px ${config.shadow}`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              mx: 'auto',
-              mb: 2.5,
-            }}
-            aria-hidden="true"
-          >
-            {config.icon}
-          </Box>
-          <Typography component="h1" variant="h5" fontWeight={800} sx={{ color: '#F1F5F9', mb: 0.5 }}>
-            Login {role}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'var(--color-text-secondary)' }}>
-            Sagara Daily Checkup
-          </Typography>
-        </Box>
-
-        {/* Demo hint */}
-        <Alert
-          severity="info"
-          sx={{
-            mb: 3,
-            background: 'rgba(59,130,246,0.08)',
-            border: '1px solid rgba(59,130,246,0.2)',
-            color: '#93C5FD',
-            fontSize: '0.78rem',
-            borderRadius: 'var(--radius-md)',
-            '& .MuiAlert-icon': { color: '#60A5FA' },
-          }}
-        >
-          {config.hint}
-        </Alert>
-
-        {/* API Error */}
-        {apiError && (
-          <Alert
-            severity="error"
-            onClose={() => setApiError('')}
-            sx={{
-              mb: 3,
-              background: 'rgba(239,68,68,0.08)',
-              border: '1px solid rgba(239,68,68,0.2)',
-              color: '#FCA5A5',
-              borderRadius: 'var(--radius-md)',
-            }}
-            role="alert"
-          >
-            {apiError}
-          </Alert>
-        )}
-
-        {/* Form */}
-        <Box component="form" onSubmit={handleSubmit} noValidate aria-label={`Form login ${role}`}>
-          <Box mb={2.5}>
-            <TextField
-              fullWidth
-              id="username"
-              label="Username"
-              value={username}
-              onChange={(e) => { setUsername(e.target.value); setErrors((p) => ({ ...p, username: '' })); }}
-              error={!!errors.username}
-              helperText={errors.username}
-              disabled={loading}
-              autoComplete="username"
-              autoFocus
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PersonIcon sx={{ color: '#475569', fontSize: 20 }} />
-                  </InputAdornment>
-                ),
-              }}
-              inputProps={{ 'aria-required': true, 'aria-describedby': errors.username ? 'username-error' : undefined }}
-              FormHelperTextProps={{ id: 'username-error', role: 'alert' }}
-            />
-          </Box>
-
-          <Box mb={3}>
-            <TextField
-              fullWidth
-              id="key"
-              label="Key (8 karakter)"
-              type={showKey ? 'text' : 'password'}
-              value={key}
-              onChange={(e) => { setKey(e.target.value.toUpperCase()); setErrors((p) => ({ ...p, key: '' })); }}
-              error={!!errors.key}
-              helperText={errors.key}
-              disabled={loading}
-              inputProps={{
-                maxLength: 8,
-                style: { fontFamily: 'monospace', letterSpacing: '0.15em' },
-                'aria-required': true,
-                'aria-describedby': errors.key ? 'key-error' : undefined,
-              }}
-              FormHelperTextProps={{ id: 'key-error', role: 'alert' }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <KeyIcon sx={{ color: '#475569', fontSize: 20 }} />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowKey(!showKey)}
-                      edge="end"
-                      size="small"
-                      aria-label={showKey ? 'Sembunyikan key' : 'Tampilkan key'}
-                    >
-                      {showKey ? <VisibilityOff sx={{ fontSize: 18, color: '#475569' }} /> : <Visibility sx={{ fontSize: 18, color: '#475569' }} />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            disabled={loading}
-            aria-label={`Masuk sebagai ${role}`}
-            sx={{
-              py: 1.5,
-              background: loading ? 'rgba(170,43,29,0.5)' : config.gradient,
-              boxShadow: `0 8px 24px ${config.shadow}`,
-              fontSize: '1rem',
-              fontWeight: 700,
-              '&:hover': {
-                background: config.gradient,
-                boxShadow: `0 12px 32px ${config.shadow}`,
-                transform: 'translateY(-1px)',
-              },
-              transition: 'all 0.2s ease',
-              position: 'relative',
-            }}
-          >
-            {loading ? (
-              <CircularProgress size={22} sx={{ color: '#fff' }} aria-label="Memproses login" />
-            ) : (
-              'Masuk'
-            )}
-          </Button>
-        </Box>
-
-        <Box mt={3} textAlign="center">
-          <Typography variant="caption" sx={{ color: '#334155' }}>
-            © 2025 Sagara Daily Checkup
-          </Typography>
-        </Box>
-      </Card>
+      <LoginCard
+        role={role}
+        config={config}
+        username={username}
+        keyValue={key}
+        showKey={showKey}
+        errors={errors}
+        apiError={apiError}
+        loading={loading}
+        onUsernameChange={handleUsernameChange}
+        onKeyChange={handleKeyChange}
+        onToggleKey={() => setShowKey((visible) => !visible)}
+        onDismissApiError={() => setApiError('')}
+        onSubmit={handleSubmit}
+      />
     </Box>
   );
 }

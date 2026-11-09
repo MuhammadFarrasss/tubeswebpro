@@ -33,7 +33,7 @@ Sistem manajemen kendaraan harian berbasis web untuk pengelolaan operasional ken
 | **Framework** | React 19 + Vite |
 | **Routing** | React Router DOM v7 |
 | **UI Library** | Material UI (MUI) v9 |
-| **HTTP Client** | Axios + Mock Fetch |
+| **HTTP Client** | Axios (Dummy API) + Mock data |
 | **Charts** | Recharts |
 | **Notifications** | React Toastify |
 | **Styling** | MUI + Custom CSS (Flexbox, Grid, Media Queries) |
@@ -98,9 +98,21 @@ npm install
 
 # Jalankan development server
 npm run dev
+
+# Di terminal terpisah, jalankan API dummy
+npm run api
 ```
 
 Aplikasi akan berjalan di: **http://localhost:5173**
+Dummy API akun berjalan di **http://localhost:3001/api/users**, kendaraan di **http://localhost:3001/api/kendaraans**, laporan kerusakan di **http://localhost:3001/api/kerusakan**, bill perbaikan di **http://localhost:3001/api/bills**, struk bensin di **http://localhost:3001/api/bensin**, dan towing di **http://localhost:3001/api/towing**. Data disimpan di `db.json`.
+
+Router HTTP ada di `api-server.js`; handler endpoint dipisah ke `api/vehicles.js`, `api/fuel.js`, dan `api/towing.js`. Helper database dan HTTP ada di `api/database.js` serta `api/http.js`.
+Endpoint struk bensin: `GET /api/bensin?driver_id=<id>`, `POST /api/bensin`, dan `PATCH /api/bensin/<id>/cancel?driver_id=<id>`. Foto struk menerima JPEG, PNG, atau WebP hingga 1 MB.
+Endpoint towing: `GET /api/towing?driver_id=<id>`, `POST /api/towing`, dan `PATCH /api/towing/<id>/cancel?driver_id=<id>`. Lokasi harus 10–300 karakter dan catatan maksimal 250 karakter.
+Workflow perbaikan: `GET /api/kerusakan` (opsional `driver_id`, `mekanik_id`, `status`), `POST /api/kerusakan`, `PATCH /api/kerusakan/<id>/approve`, dan `PATCH /api/kerusakan/<id>/complete?mekanik_id=<id>`. Laporan Pending dapat dibatalkan dengan `PATCH /api/kerusakan/<id>/cancel?driver_id=<id>`. Bill menggunakan `GET /api/bills` dan `POST /api/bills`.
+Manajemen akun menggunakan `GET /api/users` (opsional `search` dan `role`), `POST /api/users`, `PUT /api/users/<id>`, dan `DELETE /api/users/<id>`. Username harus unik (3–32 karakter), role harus Admin/Driver/Mekanik, dan key harus unik dengan 8 karakter alfanumerik. User yang masih terhubung dengan data operasional tidak dapat dihapus atau berpindah role.
+
+Untuk konfigurasi lain, salin `.env.example` ke `.env` lalu ubah `VITE_API_BASE_URL` atau `VITE_API_TARGET` sesuai kebutuhan.
 
 ### Build Production
 

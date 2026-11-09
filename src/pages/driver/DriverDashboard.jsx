@@ -28,13 +28,12 @@ export default function DriverDashboard() {
     try {
       const [k, kr] = await Promise.all([
         kendaraanService.getAll(),
-        kerusakanService.getAll(),
+        kerusakanService.getByDriver(user.id),
       ]);
-      // Get kendaraan assigned to this driver (mock: first kendaraan with driver_id matching)
-      const myKendaraan = k.data.find((v) => v.driver?.username === user?.username) || k.data[0];
+      const myKendaraan = k.data.find((vehicle) => Number(vehicle.driver_id) === Number(user.id));
       setKendaraan(myKendaraan || null);
-      setKerusakans(kr.data.filter((x) => x.driver?.username === user?.username || true).slice(0, 5));
-    } catch { setError('Gagal memuat data dashboard'); }
+      setKerusakans(kr.data.slice(0, 5));
+    } catch (err) { setError(err.message || 'Gagal memuat data dashboard'); }
     finally { setLoading(false); }
   };
 
