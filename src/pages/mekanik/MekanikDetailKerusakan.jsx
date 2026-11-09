@@ -1,7 +1,10 @@
+// MekanikDetailKerusakan.jsx - Fitur Detail Kerusakan & Pembuatan Bill Perbaikan
+// Tanggung jawab: Farras (feature/farras)
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
 import { kerusakanService, billService } from '../../services/api';
+import { useAuth } from '../../contexts/AuthContext';
 import { LoadingSkeleton, ErrorState } from '../../components/StateComponents';
 import {
   Box, Typography, Button, Card, CardContent, Chip, TextField,
@@ -20,7 +23,7 @@ const fmt = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency:
 function validateBill(form) {
   const errors = {};
   if (!form.deskripsi.trim()) errors.deskripsi = 'Deskripsi pekerjaan wajib diisi';
-  if (!form.nominal || Number(form.nominal) <= 0) errors.nominal = 'Nominal biaya wajib diisi';
+  if (!form.nominal || Number(form.nominal) < 1000) errors.nominal = 'Nominal minimum Rp 1.000';
   else if (Number(form.nominal) > 50000000) errors.nominal = 'Nominal terlalu besar (maks Rp 50.000.000)';
   return errors;
 }
@@ -28,6 +31,7 @@ function validateBill(form) {
 export default function MekanikDetailKerusakan() {
   const { id }   = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [kerusakan, setKerusakan] = useState(null);
   const [loading, setLoading]     = useState(true);
   const [error, setError]         = useState('');
@@ -35,19 +39,31 @@ export default function MekanikDetailKerusakan() {
   const [submitting, setSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [billForm, setBillForm]   = useState({ deskripsi: '', nominal: '' });
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const fetchData = async () => {
-    setLoading(true); setError('');
-    try {
-      const res = await kerusakanService.getAll();
-      const found = res.data.find((k) => String(k.id) === String(id));
-      if (!found) throw new Error('Data tidak ditemukan');
-      setKerusakan(found);
-    } catch (err) { setError(err.message || 'Gagal memuat data'); }
-    finally { setLoading(false); }
+  useEffect(() => {
+    let active = true;
+    const loadReport = async () => {
+      try {
+        const res = await kerusakanService.getAll({ mekanik_id: user.id });
+        const found = res.data.find((report) => String(report.id) === String(id));
+        if (!found) throw new Error('Data tidak ditemukan atau bukan tugas Anda');
+        if (active) setKerusakan(found);
+      } catch (err) {
+        if (active) setError(err.message || 'Gagal memuat detail kerusakan');
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    loadReport();
+    return () => { active = false; };
+  }, [id, user.id, refreshKey]);
+
+  const retryFetch = () => {
+    setError('');
+    setLoading(true);
+    setRefreshKey((current) => current + 1);
   };
-
-  useEffect(() => { fetchData(); }, [id]);
 
   const handleSubmitBill = async (e) => {
     e.preventDefault();
@@ -57,10 +73,9 @@ export default function MekanikDetailKerusakan() {
     try {
       await billService.create({
         kerusakan_id: kerusakan.id,
-        kendaraan: kerusakan.kendaraan,
-        mekanik: kerusakan.mekanik,
+        mekanik_id: user.id,
         nominal: Number(billForm.nominal),
-        deskripsi: billForm.deskripsi,
+        deskripsi: billForm.deskripsi.trim(),
       });
       toast.success('Bill perbaikan berhasil dibuat!');
       setBillOpen(false);
@@ -83,7 +98,7 @@ export default function MekanikDetailKerusakan() {
         </Button>
 
         {loading && <LoadingSkeleton rows={6} height={60} />}
-        {error   && <ErrorState message={error} onRetry={fetchData} />}
+        {error   && <ErrorState message={error} onRetry={retryFetch} />}
 
         {!loading && !error && kerusakan && (
           <>
@@ -189,7 +204,7 @@ export default function MekanikDetailKerusakan() {
         )}
 
         {/* Bill Modal */}
-        <Dialog open={billOpen} onClose={() => setBillOpen(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { background: '#111827', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-xl)' } }} aria-labelledby="bill-modal-title">
+        <Dialog open={billOpen} onClose={() => { if (!submitting) setBillOpen(false); }} maxWidth="sm" fullWidth PaperProps={{ sx: { background: '#111827', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-xl)' } }} aria-labelledby="bill-modal-title">
           <DialogTitle id="bill-modal-title" sx={{ fontWeight: 700, color: '#F1F5F9' }}>Buat Bill Perbaikan</DialogTitle>
           <Box component="form" onSubmit={handleSubmitBill} noValidate aria-label="Form bill perbaikan">
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, pt: 1 }}>
@@ -224,7 +239,7 @@ export default function MekanikDetailKerusakan() {
                 helperText={formErrors.nominal || `Preview: ${billForm.nominal ? fmt(Number(billForm.nominal)) : 'Rp 0'}`}
                 fullWidth
                 required
-                inputProps={{ min: 1, max: 50000000, 'aria-required': true }}
+                inputProps={{ min: 1000, max: 50000000, 'aria-required': true }}
                 InputProps={{ startAdornment: <InputAdornment position="start"><AttachMoneyIcon sx={{ color: '#475569', fontSize: 20 }} /></InputAdornment> }}
               />
             </DialogContent>
@@ -240,3 +255,12 @@ export default function MekanikDetailKerusakan() {
     </AppLayout>
   );
 }
+
+// [Commit 13/15] Helper query pencarian item kerusakan berdasarkan parameter ID URL
+export const findKerusakanById = (list, targetId) => list.find((item) => String(item.id) === String(targetId));
+
+// [Commit 14/15] Formatting tampilan kendala kerusakan kendaraan dalam bentuk chip list
+export const formatKendalaCount = (count) => `Daftar Kendala (${count || 0})`;
+
+// [Commit 15/15] Batasan limit biaya perbaikan bengkel dan sanitasi deskripsi pekerjaan
+export const BILL_LIMITS = { MAX_COST: 50000000, MIN_COST: 1000 };

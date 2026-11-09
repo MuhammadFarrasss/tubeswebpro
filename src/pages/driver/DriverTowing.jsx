@@ -1,3 +1,5 @@
+// DriverTowing.jsx - Fitur Permintaan Derek / Towing Kendaraan Darurat
+// Tanggung jawab: Farras (feature/farras)
 import React, { useState, useEffect } from 'react';
 import AppLayout from '../../components/AppLayout';
 import { towingService, kendaraanService } from '../../services/api';
@@ -17,7 +19,8 @@ const STATUS_COLORS = { Pending: 'warning', Diproses: 'info', Selesai: 'success'
 function validate(form) {
   const errors = {};
   if (!form.lokasi.trim()) errors.lokasi = 'Lokasi wajib diisi';
-  else if (form.lokasi.trim().length < 10) errors.lokasi = 'Masukkan alamat yang lebih detail (min 10 karakter)';
+  else if (form.lokasi.trim().length < 10 || form.lokasi.trim().length > 300) errors.lokasi = 'Lokasi harus terdiri dari 10 sampai 300 karakter';
+  if (form.catatan.trim().length > 250) errors.catatan = 'Catatan maksimal 250 karakter';
   return errors;
 }
 
@@ -31,45 +34,80 @@ export default function DriverTowing() {
   const [submitting, setSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [form, setForm] = useState({ lokasi: '', catatan: '' });
+  const [cancelingId, setCancelingId] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const fetchData = async () => {
-    setLoading(true); setError('');
-    try {
-      const [t, k] = await Promise.all([towingService.getAll(), kendaraanService.getAll()]);
-      setTowings(t.data);
-      setKendaraan(k.data[0] || null);
-    } catch { setError('Gagal memuat data towing'); }
-    finally { setLoading(false); }
+  useEffect(() => {
+    let active = true;
+    const loadData = async () => {
+      try {
+        const [t, k] = await Promise.all([
+          towingService.getAll({ driver_id: user.id }),
+          kendaraanService.getAll(),
+        ]);
+        if (!active) return;
+        setTowings(t.data);
+        setKendaraan(k.data.find((item) => Number(item.driver_id) === Number(user.id)) || null);
+      } catch (err) {
+        if (active) setError(err.message || 'Gagal memuat data towing');
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    loadData();
+    return () => { active = false; };
+  }, [user.id, refreshKey]);
+
+  const retryFetch = () => {
+    setError('');
+    setLoading(true);
+    setRefreshKey((current) => current + 1);
   };
 
-  useEffect(() => { fetchData(); }, []);
+  const resetForm = () => {
+    setForm({ lokasi: '', catatan: '' });
+    setFormErrors({});
+  };
+
+  const closeForm = () => {
+    if (submitting) return;
+    setFormOpen(false);
+    resetForm();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate(form);
     if (Object.keys(errs).length) { setFormErrors(errs); return; }
+    if (!kendaraan) {
+      toast.error('Akun Anda belum memiliki kendaraan yang ditugaskan');
+      return;
+    }
     setSubmitting(true);
     try {
-      await towingService.create({
-        ...form,
-        driver: { username: user?.username },
-        kendaraan: { merek: kendaraan?.merek, plat_nomor: kendaraan?.plat_nomor },
+      const { data } = await towingService.create({
+        lokasi: form.lokasi.trim(),
+        catatan: form.catatan.trim(),
+        driver_id: user.id,
+        kendaraan_id: kendaraan.id,
       });
       toast.success('Request towing berhasil dikirim!');
       setFormOpen(false);
-      setForm({ lokasi: '', catatan: '' });
-      fetchData();
+      resetForm();
+      setTowings((current) => [data, ...current]);
     } catch (err) { toast.error(err.message || 'Terjadi kesalahan'); }
     finally { setSubmitting(false); }
   };
 
   const handleCancel = async (id) => {
     if (!window.confirm('Batalkan request towing ini?')) return;
+    setCancelingId(id);
     try {
-      await towingService.cancel(id);
+      const { data } = await towingService.cancel(id, user.id);
+      setTowings((current) => current.map((requestItem) => (requestItem.id === id ? data : requestItem)));
       toast.success('Request dibatalkan');
-      fetchData();
-    } catch { toast.error('Gagal membatalkan'); }
+    } catch (err) { toast.error(err.message || 'Gagal membatalkan request towing'); }
+    finally { setCancelingId(null); }
   };
 
   return (
@@ -80,7 +118,7 @@ export default function DriverTowing() {
             <Typography component="h1" variant="h4" fontWeight={800} sx={{ color: '#F1F5F9', mb: 0.5 }}>Request Towing</Typography>
             <Typography variant="body2" sx={{ color: 'var(--color-text-secondary)' }}>Minta bantuan derek kendaraan Anda</Typography>
           </Box>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => { setFormOpen(true); setFormErrors({}); setForm({ lokasi: '', catatan: '' }); }} aria-label="Buat request towing baru" sx={{ background: 'linear-gradient(135deg,#1D4ED8,#3B82F6)', flexShrink: 0 }}>
+          <Button variant="contained" startIcon={<AddIcon />} onClick={() => { resetForm(); setFormOpen(true); }} disabled={!kendaraan || loading} aria-label="Buat request towing baru" sx={{ background: 'linear-gradient(135deg,#1D4ED8,#3B82F6)', flexShrink: 0 }}>
             Request Towing
           </Button>
         </Box>
@@ -95,8 +133,14 @@ export default function DriverTowing() {
           </CardContent>
         </Card>
 
+        {!loading && !error && !kendaraan && (
+          <Box role="alert" sx={{ p: 2, mb: 3, borderRadius: 'var(--radius-md)', color: '#FCD34D', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.25)' }}>
+            Akun Anda belum memiliki kendaraan yang ditugaskan. Hubungi admin sebelum membuat request towing.
+          </Box>
+        )}
+
         {loading && <LoadingSkeleton rows={3} height={100} />}
-        {error   && <ErrorState message={error} onRetry={fetchData} />}
+        {error   && <ErrorState message={error} onRetry={retryFetch} />}
         {!loading && !error && towings.length === 0 && <EmptyState message="Belum ada request towing" icon="🚛" />}
 
         {!loading && !error && (
@@ -116,8 +160,8 @@ export default function DriverTowing() {
                     <Box display="flex" gap={1} alignItems="center">
                       <Chip label={t.status} color={STATUS_COLORS[t.status] || 'default'} size="small" sx={{ fontWeight: 700 }} />
                       {t.status === 'Pending' && (
-                        <IconButton size="small" onClick={() => handleCancel(t.id)} aria-label={`Batalkan request towing kendaraan ${t.kendaraan?.merek}`} sx={{ color: '#EF4444', '&:hover': { background: 'rgba(239,68,68,0.1)' } }}>
-                          <CancelIcon fontSize="small" />
+                        <IconButton size="small" onClick={() => handleCancel(t.id)} disabled={cancelingId !== null} aria-label={`Batalkan request towing kendaraan ${t.kendaraan?.merek}`} sx={{ color: '#EF4444', '&:hover': { background: 'rgba(239,68,68,0.1)' } }}>
+                          {cancelingId === t.id ? '…' : <CancelIcon fontSize="small" />}
                         </IconButton>
                       )}
                     </Box>
@@ -144,7 +188,7 @@ export default function DriverTowing() {
         )}
 
         {/* Form Modal */}
-        <Dialog open={formOpen} onClose={() => setFormOpen(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { background: '#111827', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-xl)' } }} aria-labelledby="towing-modal-title">
+        <Dialog open={formOpen} onClose={closeForm} maxWidth="sm" fullWidth PaperProps={{ sx: { background: '#111827', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-xl)' } }} aria-labelledby="towing-modal-title">
           <DialogTitle id="towing-modal-title" sx={{ fontWeight: 700, color: '#F1F5F9' }}>Request Towing</DialogTitle>
           <Box component="form" onSubmit={handleSubmit} noValidate aria-label="Form request towing">
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, pt: 1 }}>
@@ -161,13 +205,13 @@ export default function DriverTowing() {
                 value={form.lokasi}
                 onChange={(e) => { setForm((p) => ({ ...p, lokasi: e.target.value })); setFormErrors((p) => ({ ...p, lokasi: '' })); }}
                 error={!!formErrors.lokasi}
-                helperText={formErrors.lokasi || 'Contoh: Jl. Sudirman No. 45, Jakarta Pusat, dekat SPBU Shell'}
+                helperText={formErrors.lokasi || 'Contoh: Jl. Sudirman No. 45, Jakarta Pusat (min. 10, maks. 300 karakter)'}
                 fullWidth
                 required
                 autoFocus
                 placeholder="Masukkan lokasi lengkap Anda..."
                 InputProps={{ startAdornment: <Box sx={{ mr: 1, color: '#475569', fontSize: '1.1rem' }} aria-hidden="true">📍</Box> }}
-                inputProps={{ 'aria-required': true }}
+                inputProps={{ maxLength: 300, 'aria-required': true }}
               />
 
               <TextField
@@ -175,13 +219,16 @@ export default function DriverTowing() {
                 multiline
                 rows={3}
                 value={form.catatan}
-                onChange={(e) => setForm((p) => ({ ...p, catatan: e.target.value }))}
+                onChange={(e) => { setForm((p) => ({ ...p, catatan: e.target.value })); setFormErrors((p) => ({ ...p, catatan: '' })); }}
+                error={!!formErrors.catatan}
+                helperText={formErrors.catatan || `${form.catatan.length}/250 karakter`}
                 fullWidth
                 placeholder="Jelaskan kondisi kendaraan, apakah mogok, kecelakaan, dll..."
+                inputProps={{ maxLength: 250 }}
               />
             </DialogContent>
             <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
-              <Button onClick={() => setFormOpen(false)} sx={{ color: '#64748B' }} disabled={submitting}>Batal</Button>
+              <Button onClick={closeForm} sx={{ color: '#64748B' }} disabled={submitting}>Batal</Button>
               <Button type="submit" variant="contained" disabled={submitting} sx={{ background: 'linear-gradient(135deg,#1D4ED8,#3B82F6)' }}>
                 {submitting ? 'Mengirim...' : 'Kirim Request'}
               </Button>
