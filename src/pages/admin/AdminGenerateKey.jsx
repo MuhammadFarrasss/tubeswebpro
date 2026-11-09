@@ -118,7 +118,7 @@ export default function AdminGenerateKey() {
       toast.success('User berhasil dihapus');
       setDeleteId(null);
       fetchData();
-    } catch { toast.error('Gagal menghapus user'); }
+    } catch (err) { toast.error(err.message || 'Gagal menghapus user'); }
   };
 
   return (

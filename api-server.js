@@ -6,6 +6,7 @@ import { handleFuelRequest, fuelRoute } from './api/fuel.js';
 import { handleTowingRequest, towingRoute } from './api/towing.js';
 import { handleRepairRequest, repairRoute } from './api/repairs.js';
 import { handleBillRequest, billRoute } from './api/bills.js';
+import { handleUserRequest, userRoute } from './api/users.js';
 
 const port = Number(process.env.API_PORT || 3001);
 const routes = [
@@ -14,6 +15,7 @@ const routes = [
   { pattern: towingRoute, handle: handleTowingRequest },
   { pattern: repairRoute, handle: handleRepairRequest },
   { pattern: billRoute, handle: handleBillRequest },
+  { pattern: userRoute, handle: handleUserRequest },
 ];
 
 const server = createServer(async (request, response) => {
