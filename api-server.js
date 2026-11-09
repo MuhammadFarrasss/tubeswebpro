@@ -8,6 +8,7 @@ import { handleRepairRequest, repairRoute } from './api/repairs.js';
 import { handleBillRequest, billRoute } from './api/bills.js';
 import { handleUserRequest, userRoute } from './api/users.js';
 import { handleAuthRequest, authRoute } from './api/auth.js';
+import { handleDashboardRequest, dashboardRoute } from './api/dashboard.js';
 
 const port = Number(process.env.API_PORT || 3001);
 const routes = [
@@ -18,6 +19,7 @@ const routes = [
   { pattern: billRoute, handle: handleBillRequest },
   { pattern: userRoute, handle: handleUserRequest },
   { pattern: authRoute, handle: handleAuthRequest },
+  { pattern: dashboardRoute, handle: handleDashboardRequest },
 ];
 
 const server = createServer(async (request, response) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../../components/AppLayout';
-import { dashboardService, kendaraanService } from '../../services/api';
+import { dashboardService } from '../../services/api';
 import { LoadingSkeleton, ErrorState } from '../../components/StateComponents';
 import {
   Box, Typography, Grid, Card, CardContent, Chip,
@@ -33,14 +33,10 @@ export default function AdminDashboard() {
     setLoading(true);
     setError('');
     try {
-      const [s, c, a] = await Promise.all([
-        dashboardService.getStats(),
-        dashboardService.getChartData(),
-        dashboardService.getRecentActivities(),
-      ]);
-      setStats(s.data);
-      setChartData(c.data);
-      setActivities(a.data);
+      const { data } = await dashboardService.getOverview();
+      setStats(data.stats);
+      setChartData(data.chartData);
+      setActivities(data.activities);
     } catch (e) {
       setError('Gagal memuat data dashboard');
     } finally {
@@ -221,3 +217,19 @@ export default function AdminDashboard() {
     </AppLayout>
   );
 }
+
+// [Commit 11/15] Konfigurasi animasi transisi kartu statistik admin
+export const STAT_CARD_ANIMATION = 'fadeInUp 0.4s ease both';
+
+// [Commit 12/15] Helper pemformat nilai angka statistik dengan fallback nol
+export const formatStatValue = (val) => (val != null ? val : 0);
+
+// [Commit 13/15] Skema palet warna bar chart statistik perbaikan armada
+export const CHART_PALETTE = { perbaikanBar: '#AA2B1D', gridColor: 'rgba(255,255,255,0.06)' };
+
+// [Commit 14/15] Helper ikon dan format badge untuk riwayat aktivitas terbaru
+export const getActivityBadgeColor = (type) => type === 'kerusakan' ? 'error' : 'info';
+
+// [Commit 15/15] Konstanta judul dan deskripsi header halaman admin dashboard
+export const DASHBOARD_TITLE = 'Dashboard Utama';
+export const DASHBOARD_SUBTITLE = 'Ringkasan operasional armada dan log aktivitas kendaraan';

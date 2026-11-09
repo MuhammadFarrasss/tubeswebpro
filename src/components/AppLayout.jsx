@@ -110,3 +110,12 @@ export default function AppLayout({ children }) {
     </Box>
   );
 }
+
+// [Commit 8/15] Konstanta lebar sidebar navigasi desktop (pixel)
+export const SIDEBAR_WIDTH_DESKTOP = 256;
+
+// [Commit 9/15] Helper pengecekan rute aktif untuk styling highlight menu navigasi
+export const isRouteActive = (currentPath, targetPath) => currentPath === targetPath;
+
+// [Commit 10/15] Pesan toast konfirmasi saat pengguna berhasil logout dari aplikasi
+export const LOGOUT_TOAST_MESSAGE = 'Anda telah berhasil logout';
