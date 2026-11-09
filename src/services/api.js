@@ -2,7 +2,7 @@
 import axios from 'axios';
 import {
   mockUsers, mockKerusakans, mockBillPerbaikan,
-  mockStruKBensin, mockTowings, mockDashboardStats, mockChartData,
+  mockTowings, mockDashboardStats, mockChartData,
   mockRecentActivities,
 } from '../data/mockData';
 
@@ -136,19 +136,11 @@ export const kerusakanService = {
 };
 
 export const bensinService = {
-  getAll: () => mockFetch(mockStruKBensin),
-  create: async (payload) => {
-    await delay(700);
-    const newItem = { ...payload, id: Date.now(), status: 'Pending', created_at: new Date().toISOString() };
-    mockStruKBensin.push(newItem);
-    return { data: newItem, status: 201 };
-  },
-  cancel: async (id) => {
-    await delay(600);
-    const idx = mockStruKBensin.findIndex((b) => b.id === id);
-    if (idx !== -1) mockStruKBensin[idx].status = 'Cancelled';
-    return { data: { message: 'Cancelled' }, status: 200 };
-  },
+  getAll: (params) => apiClient.get('/bensin', { params }),
+  create: (payload) => apiClient.post('/bensin', payload),
+  cancel: (id, driverId) => apiClient.patch(`/bensin/${id}/cancel`, null, {
+    params: { driver_id: driverId },
+  }),
 };
 
 export const towingService = {

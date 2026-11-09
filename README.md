@@ -33,7 +33,7 @@ Sistem manajemen kendaraan harian berbasis web untuk pengelolaan operasional ken
 | **Framework** | React 19 + Vite |
 | **Routing** | React Router DOM v7 |
 | **UI Library** | Material UI (MUI) v9 |
-| **HTTP Client** | Axios + Mock Fetch |
+| **HTTP Client** | Axios (Dummy API) + Mock data |
 | **Charts** | Recharts |
 | **Notifications** | React Toastify |
 | **Styling** | MUI + Custom CSS (Flexbox, Grid, Media Queries) |
@@ -99,12 +99,14 @@ npm install
 # Jalankan development server
 npm run dev
 
-# Di terminal terpisah, jalankan API dummy kendaraan
+# Di terminal terpisah, jalankan API dummy kendaraan dan struk bensin
 npm run api
 ```
 
 Aplikasi akan berjalan di: **http://localhost:5173**
-API dummy kendaraan berjalan di: **http://localhost:3001/api/kendaraans**. Data disimpan di `db.json`.
+Dummy API kendaraan berjalan di **http://localhost:3001/api/kendaraans** dan API struk bensin di **http://localhost:3001/api/bensin**. Data disimpan di `db.json`.
+
+Endpoint struk bensin: `GET /api/bensin?driver_id=<id>`, `POST /api/bensin`, dan `PATCH /api/bensin/<id>/cancel?driver_id=<id>`. Foto struk menerima JPEG, PNG, atau WebP hingga 1 MB.
 
 Untuk konfigurasi lain, salin `.env.example` ke `.env` lalu ubah `VITE_API_BASE_URL` atau `VITE_API_TARGET` sesuai kebutuhan.
 
