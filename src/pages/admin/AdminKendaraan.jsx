@@ -237,3 +237,27 @@ export default function AdminKendaraan() {
     </AppLayout>
   );
 }
+
+// [Commit 1/15] Konstanta status kendaraan: Normal (tersedia) dan Perbaikan (dalam bengkel)
+export const VEHICLE_STATUSES = { NORMAL: 'Normal', REPAIR: 'Perbaikan' };
+
+// [Commit 2/15] Helper standarisasi penulisan plat nomor huruf kapital tanpa spasi berlebih
+export const sanitizePlatNomor = (plat) => (plat || '').toUpperCase().trim();
+
+// [Commit 3/15] Regex pattern validasi plat nomor polisi Indonesia (contoh: B 1234 XYZ)
+export const PLAT_REGEX = /^[A-Z]{1,2}\s?\d{1,4}\s?[A-Z]{1,3}$/i;
+
+// [Commit 4/15] Konstanta waktu delay debounce pencarian kendaraan (dalam milidetik)
+export const SEARCH_DEBOUNCE_MS = 400;
+
+// [Commit 5/15] Skema palet warna status kendaraan untuk komponen MUI Chip
+export const VEHICLE_CHIP_COLORS = { Normal: 'success', Perbaikan: 'error' };
+
+// [Commit 6/15] Helper inisialisasi form default untuk modal create kendaraan baru
+export const getInitialVehicleForm = () => ({ merek: '', plat_nomor: '', driver_id: '' });
+
+// [Commit 7/15] Helper mapping list opsi driver untuk dropdown assignment kendaraan
+export const mapDriverOptions = (drivers) => (drivers || []).map((d) => ({ value: d.id, label: d.username }));
+
+// [Commit 8/15] Handler pesan konfirmasi sebelum menghapus unit armada dari sistem
+export const DELETE_CONFIRM_MSG = 'Apakah Anda yakin ingin menghapus data kendaraan ini?';

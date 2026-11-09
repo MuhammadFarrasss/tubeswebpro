@@ -1,29 +1,52 @@
 {
   "users": [
     {
+      "id": 1,
+      "username": "admin_sagara",
+      "role": "Admin",
+      "key": "ADM12345",
+      "gambar": null,
+      "created_at": "2025-01-10"
+    },
+    {
       "id": 2,
       "username": "budi_driver",
-      "role": "Driver"
+      "role": "Driver",
+      "key": "DRV98765",
+      "gambar": null,
+      "created_at": "2025-01-12"
     },
     {
       "id": 3,
       "username": "andi_driver",
-      "role": "Driver"
+      "role": "Driver",
+      "key": "DRV11111",
+      "gambar": null,
+      "created_at": "2025-01-15"
     },
     {
       "id": 6,
       "username": "deni_driver",
-      "role": "Driver"
+      "role": "Driver",
+      "key": "DRV44444",
+      "gambar": null,
+      "created_at": "2025-02-05"
     },
     {
       "id": 4,
       "username": "rizki_mekanik",
-      "role": "Mekanik"
+      "role": "Mekanik",
+      "key": "MEK22222",
+      "gambar": null,
+      "created_at": "2025-01-18"
     },
     {
       "id": 5,
       "username": "sani_mekanik",
-      "role": "Mekanik"
+      "role": "Mekanik",
+      "key": "MEK33333",
+      "gambar": null,
+      "created_at": "2025-02-01"
     }
   ],
   "kendaraans": [
@@ -114,8 +137,14 @@
       "is_accept": true,
       "catatan": "Mesin overheat, perlu penggantian thermostat dan radiator flush",
       "kendala": [
-        { "name": "Overheating", "description": "Suhu mesin melebihi normal" },
-        { "name": "Radiator bocor", "description": "Terdapat kebocoran kecil di selang radiator" }
+        {
+          "name": "Overheating",
+          "description": "Suhu mesin melebihi normal"
+        },
+        {
+          "name": "Radiator bocor",
+          "description": "Terdapat kebocoran kecil di selang radiator"
+        }
       ],
       "gambar": null,
       "created_at": "2025-10-15T08:30:00Z"
@@ -129,8 +158,14 @@
       "is_accept": false,
       "catatan": "Ban kempes dan lampu sein kanan mati",
       "kendala": [
-        { "name": "Ban kempes", "description": "Ban belakang kiri bocor" },
-        { "name": "Lampu sein mati", "description": "Lampu sein kanan depan tidak berfungsi" }
+        {
+          "name": "Ban kempes",
+          "description": "Ban belakang kiri bocor"
+        },
+        {
+          "name": "Lampu sein mati",
+          "description": "Lampu sein kanan depan tidak berfungsi"
+        }
       ],
       "gambar": null,
       "created_at": "2025-10-28T09:15:00Z"
@@ -144,7 +179,10 @@
       "is_accept": true,
       "catatan": "AC tidak dingin",
       "kendala": [
-        { "name": "AC rusak", "description": "Kompresor AC bermasalah" }
+        {
+          "name": "AC rusak",
+          "description": "Kompresor AC bermasalah"
+        }
       ],
       "gambar": null,
       "created_at": "2025-10-20T14:00:00Z"

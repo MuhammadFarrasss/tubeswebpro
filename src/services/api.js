@@ -1,7 +1,6 @@
 // API service layer - semua fetch via axios sesuai spesifikasi
 import axios from 'axios';
 import {
-  mockUsers,
   mockDashboardStats, mockChartData,
   mockRecentActivities,
 } from '../data/mockData';
@@ -66,38 +65,10 @@ export const kendaraanService = {
 };
 
 export const userService = {
-  getAll: (params = {}) => {
-    let data = [...mockUsers];
-    if (params.search) {
-      const q = params.search.toLowerCase();
-      data = data.filter((u) => u.username.toLowerCase().includes(q));
-    }
-    if (params.role && params.role !== 'all') {
-      data = data.filter((u) => u.role === params.role);
-    }
-    return mockFetch(data);
-  },
-  create: async (payload) => {
-    await delay(700);
-    const exists = mockUsers.find((u) => u.username === payload.username);
-    if (exists) throw new Error('Username sudah digunakan');
-    const newUser = { ...payload, id: Date.now(), gambar: null, created_at: new Date().toISOString() };
-    mockUsers.push(newUser);
-    return { data: newUser, status: 201 };
-  },
-  update: async (id, payload) => {
-    await delay(700);
-    const idx = mockUsers.findIndex((u) => u.id === id);
-    if (idx === -1) throw new Error('User tidak ditemukan');
-    mockUsers[idx] = { ...mockUsers[idx], ...payload };
-    return { data: mockUsers[idx], status: 200 };
-  },
-  remove: async (id) => {
-    await delay(600);
-    const idx = mockUsers.findIndex((u) => u.id === id);
-    if (idx !== -1) mockUsers.splice(idx, 1);
-    return { data: { message: 'Deleted' }, status: 200 };
-  },
+  getAll: (params = {}) => apiClient.get('/users', { params }),
+  create: (payload) => apiClient.post('/users', payload),
+  update: (id, payload) => apiClient.put(`/users/${id}`, payload),
+  remove: (id) => apiClient.delete(`/users/${id}`),
 };
 
 export const kerusakanService = {
