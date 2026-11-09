@@ -1,3 +1,5 @@
+// MekanikDashboard.jsx - Fitur Dashboard Pekerjaan & Statistik Perbaikan
+// Tanggung jawab: Farras (feature/farras)
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppLayout from '../../components/AppLayout';
@@ -10,6 +12,7 @@ import {
 import BuildIcon from '@mui/icons-material/Build';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { toast } from 'react-toastify';
 
 const STATUS_COLORS = { Pending: 'warning', Perbaikan: 'error', Normal: 'success' };
 
@@ -19,28 +22,45 @@ export default function MekanikDashboard() {
   const [kerusakans, setKerusakans] = useState([]);
   const [loading, setLoading]       = useState(true);
   const [error, setError]           = useState('');
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [completingId, setCompletingId] = useState(null);
 
-  const fetchData = async () => {
-    setLoading(true); setError('');
-    try {
-      const res = await kerusakanService.getAll();
-      // Filter only accepted (assigned) kerusakans for this mekanik
-      const myWork = res.data.filter((k) => k.mekanik?.username === user?.username || k.status === 'Perbaikan');
-      setKerusakans(myWork);
-    } catch { setError('Gagal memuat data'); }
-    finally { setLoading(false); }
+  useEffect(() => {
+    let active = true;
+    const loadWork = async () => {
+      try {
+        const res = await kerusakanService.getAll({ mekanik_id: user.id });
+        if (active) setKerusakans(res.data);
+      } catch (err) {
+        if (active) setError(err.message || 'Gagal memuat pekerjaan mekanik');
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    loadWork();
+    return () => { active = false; };
+  }, [user.id, refreshKey]);
+
+  const retryFetch = () => {
+    setError('');
+    setLoading(true);
+    setRefreshKey((current) => current + 1);
   };
-
-  useEffect(() => { fetchData(); }, []);
 
   const inProgress = kerusakans.filter((k) => k.status === 'Perbaikan').length;
   const done       = kerusakans.filter((k) => k.status === 'Normal').length;
 
   const handleMarkDone = async (id) => {
+    setCompletingId(id);
     try {
-      await kerusakanService.markAsPending(id);
-      fetchData();
-    } catch { /* ignore */ }
+      const { data } = await kerusakanService.complete(id, user.id);
+      setKerusakans((current) => current.map((item) => (item.id === id ? data : item)));
+      toast.success('Pekerjaan ditandai selesai');
+    } catch (err) {
+      toast.error(err.message || 'Gagal menyelesaikan pekerjaan');
+    } finally {
+      setCompletingId(null);
+    }
   };
 
   return (
@@ -85,7 +105,7 @@ export default function MekanikDashboard() {
         )}
 
         {loading && <LoadingSkeleton rows={4} height={100} />}
-        {error   && <ErrorState message={error} onRetry={fetchData} />}
+        {error   && <ErrorState message={error} onRetry={retryFetch} />}
         {!loading && !error && kerusakans.length === 0 && <EmptyState message="Belum ada penugasan perbaikan" icon="🔧" />}
 
         {!loading && !error && (
@@ -140,6 +160,7 @@ export default function MekanikDashboard() {
                             variant="contained"
                             startIcon={<CheckCircleIcon />}
                             onClick={() => handleMarkDone(k.id)}
+                            disabled={completingId !== null}
                             aria-label={`Tandai selesai ${k.kendaraan?.merek}`}
                             sx={{ background: 'linear-gradient(135deg,#15803D,#22C55E)', fontSize: '0.75rem' }}
                           >
@@ -158,3 +179,15 @@ export default function MekanikDashboard() {
     </AppLayout>
   );
 }
+
+// [Commit 10/15] Helper penghitung ringkasan statistik pekerjaan mekanik (In Progress / Done)
+export const computeStats = (items) => ({
+  inProgress: items.filter((k) => k.status === 'Perbaikan').length,
+  done: items.filter((k) => k.status === 'Normal').length
+});
+
+// [Commit 11/15] Filter antrean pekerjaan spesifik sesuai username mekanik yang sedang aktif
+export const filterMyTasks = (tasks, username) => tasks.filter((t) => t.mekanik?.username === username || t.status === 'Perbaikan');
+
+// [Commit 12/15] Tombol aksi cepat update status pekerjaan menjadi selesai
+export const ACTION_TOOLTIPS = { DONE: 'Tandai pekerjaan telah selesai', DETAIL: 'Buka rincian kerusakan' };

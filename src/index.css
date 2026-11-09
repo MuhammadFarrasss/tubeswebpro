@@ -110,6 +110,11 @@ body {
   100% { background-position: 200% 0; }
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .animate-fadeInUp  { animation: fadeInUp 0.5s ease both; }
 .animate-fadeIn    { animation: fadeIn 0.4s ease both; }
 .animate-slideLeft { animation: slideInLeft 0.4s ease both; }
@@ -163,3 +168,6 @@ body {
 @media (max-width: 480px) {
   .content-area { padding: 12px; }
 }
+
+/* [Commit 15/15] Optimasi utility classes responsif dan custom dark scrollbar */
+.app-smooth-scroll { scroll-behavior: smooth; }

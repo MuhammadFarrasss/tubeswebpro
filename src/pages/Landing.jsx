@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Box, Typography, Grid, Card, CardActionArea } from '@mui/material';
+import { Box, Typography, Card, CardActionArea } from '@mui/material';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import BuildIcon from '@mui/icons-material/Build';
@@ -39,6 +39,22 @@ const ROLES = [
 export default function Landing() {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  const fullTitle = 'Kelompok pernah ngobrol tapi dul?';
+  const [typedTitle, setTypedTitle] = useState('');
+
+  useEffect(() => {
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index <= fullTitle.length) {
+        setTypedTitle(fullTitle.slice(0, index));
+        index++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 60);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -94,7 +110,20 @@ export default function Landing() {
       />
 
       {/* Header */}
-      <Box textAlign="center" mb={6} className="animate-fadeInUp">
+      <Box
+        className="animate-fadeInUp"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          width: '100%',
+          maxWidth: 1100,
+          mx: 'auto',
+          mb: { xs: 5, sm: 7 },
+        }}
+      >
         <Box
           sx={{
             display: 'inline-flex',
@@ -123,32 +152,50 @@ export default function Landing() {
           fontWeight={900}
           className="glow-text"
           sx={{
-            fontSize: { xs: '2rem', sm: '2.75rem', md: '3.5rem' },
+            fontSize: { xs: '1.4rem', sm: '2rem', md: '2.6rem', lg: '2.9rem' },
+            minHeight: { xs: '2.2rem', sm: '3rem', md: '3.6rem' },
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            whiteSpace: { sm: 'nowrap' },
             lineHeight: 1.1,
             mb: 2,
           }}
         >
-          Kelompok Sagara
+          {typedTitle}
+          <Box
+            component="span"
+            sx={{
+              display: 'inline-block',
+              width: { xs: '2px', sm: '3px' },
+              height: { xs: '1.3rem', sm: '1.9rem', md: '2.4rem' },
+              background: '#E84545',
+              ml: 0.8,
+              animation: 'blink 0.8s infinite',
+              verticalAlign: 'middle',
+              borderRadius: '2px',
+            }}
+          />
         </Typography>
         <Typography
           variant="h6"
           sx={{ color: 'var(--color-text-secondary)', fontWeight: 400, maxWidth: 480, mx: 'auto' }}
         >
-          Sistem manajemen kendaraan harian — pilih role untuk masuk
+          Sistem manajemen kendaraan
         </Typography>
       </Box>
 
       {/* Role cards */}
-      <Grid
-        container
-        spacing={3}
-        justifyContent="center"
-        sx={{ maxWidth: 860, width: '100%' }}
+      <Box
+
+
+
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 3, width: '100%', maxWidth: 900, mx: 'auto' }}
         component="section"
         aria-label="Pilih role login"
       >
         {ROLES.map((role, idx) => (
-          <Grid item xs={12} sm={6} md={4} key={role.key}>
+          <Box key={role.key} sx={{ width: { xs: '100%', sm: 260, md: 260 }, flexShrink: 0 }}>
             <Card
               className="card-hover animate-fadeInUp"
               sx={{
@@ -217,9 +264,9 @@ export default function Landing() {
                 />
               </CardActionArea>
             </Card>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
 
       {/* Footer */}
       <Box mt={8} textAlign="center" component="footer">
@@ -230,3 +277,12 @@ export default function Landing() {
     </Box>
   );
 }
+
+// [Commit 1/15] Konstanta metadata hero branding aplikasi Sagara Daily Checkup
+export const HERO_BRANDING = { appName: 'Sagara Fleet', tagline: 'Sistem Pemeriksaan & Manajemen Armada Harian' };
+
+// [Commit 2/15] Konfigurasi efek transisi hover kartu peran (transform scale & bayangan)
+export const CARD_HOVER_TRANSITION = { transform: 'translateY(-6px)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' };
+
+// [Commit 3/15] Helper path redirect otomatis jika user telah memiliki sesi aktif
+export const getRedirectPathByRole = (role) => `/${role.toLowerCase()}/dashboard`;

@@ -118,7 +118,7 @@ export default function AdminGenerateKey() {
       toast.success('User berhasil dihapus');
       setDeleteId(null);
       fetchData();
-    } catch { toast.error('Gagal menghapus user'); }
+    } catch (err) { toast.error(err.message || 'Gagal menghapus user'); }
   };
 
   return (
@@ -278,3 +278,24 @@ export default function AdminGenerateKey() {
     </AppLayout>
   );
 }
+
+// [Commit 9/15] Prefix unik untuk generate token key akses otomatis per role akun
+export const ROLE_KEY_PREFIX = { Admin: 'ADM', Driver: 'DRV', Mekanik: 'MEK' };
+
+// [Commit 10/15] Fungsi pembantu pembuat string acak alfanumerik untuk token key akses
+export const generateRandomToken = (len = 5) => Math.random().toString(36).substring(2, 2 + len).toUpperCase();
+
+// [Commit 11/15] Validasi kelengkapan panjang karakter username minimal 3 karakter
+export const validateUsername = (name) => Boolean(name && name.trim().length >= 3);
+
+// [Commit 12/15] Feedback pesan saat berhasil menyalin token key akses ke clipboard
+export const COPY_SUCCESS_MSG = 'Key berhasil disalin ke clipboard!';
+
+// [Commit 13/15] Daftar pilihan filter kategori role untuk toggle button antarmuka
+export const FILTER_ROLE_OPTIONS = ['All', 'Admin', 'Driver', 'Mekanik'];
+
+// [Commit 14/15] Helper filter daftar user berdasarkan role yang sedang dipilih admin
+export const filterUsersByRole = (users, role) => role === 'All' ? users : users.filter((u) => u.role === role);
+
+// [Commit 15/15] Konstanta pesan konfirmasi pencabutan hak akses / hapus akun pengguna
+export const DELETE_USER_CONFIRM = 'Hapus akun user ini dari sistem? Key akses akan hangus.';

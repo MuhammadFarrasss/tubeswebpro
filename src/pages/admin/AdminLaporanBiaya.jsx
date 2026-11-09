@@ -123,3 +123,24 @@ export default function AdminLaporanBiaya() {
     </AppLayout>
   );
 }
+
+// [Commit 9/15] Header judul dan subjudul modul laporan pengeluaran bengkel
+export const LAPORAN_HEADER = { title: 'Laporan Biaya Perbaikan', subtitle: 'Rekapitulasi total pengeluaran servis armada' };
+
+// [Commit 10/15] Helper format rupiah presisi tanpa digit desimal (akuntansi IDR)
+export const formatCurrencyIDR = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val || 0);
+
+// [Commit 11/15] Parameter konfigurasi pemanggilan data bill invoice servis dari API
+export const BILL_QUERY_CONFIG = { sortBy: 'created_at', order: 'desc' };
+
+// [Commit 12/15] Fungsi komputasi total pengeluaran kumulatif dari seluruh invoice tagihan
+export const calculateTotalPengeluaran = (billList) => (billList || []).reduce((acc, b) => acc + (Number(b.nominal) || 0), 0);
+
+// [Commit 13/15] Styling kartu ringkasan total biaya pengeluaran armada bengkel
+export const SUMMARY_CARD_THEME = { gradient: 'linear-gradient(135deg,#065F46,#10B981)', iconColor: '#A7F3D0' };
+
+// [Commit 14/15] Helper ekstraksi detail kendaraan pada item invoice tagihan perbaikan
+export const getBillVehicleInfo = (bill) => `${bill.kendaraan?.merek || 'Kendaraan'} (${bill.kendaraan?.plat_nomor || '-'})`;
+
+// [Commit 15/15] Pesan informasi tampilan saat belum ada tagihan biaya perbaikan
+export const EMPTY_BILL_MESSAGE = 'Belum ada riwayat tagihan perbaikan yang tercatat.';

@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import AppLayout from '../../components/AppLayout';
 import { kendaraanService, userService } from '../../services/api';
 import { LoadingSkeleton, ErrorState, EmptyState } from '../../components/StateComponents';
+import KendaraanDialogs from './KendaraanDialogs';
 import {
-  Box, Typography, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions,
+  Box, Typography, Button, TextField,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  MenuItem, Select, FormControl, InputLabel, InputAdornment, Chip, IconButton, Tooltip,
-  FormHelperText,
+  InputAdornment, Chip, IconButton, Tooltip,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -219,87 +219,45 @@ export default function AdminKendaraan() {
           </TableContainer>
         )}
 
-        {/* Create/Edit Modal */}
-        <Dialog
-          open={modalOpen}
-          onClose={closeModal}
-          maxWidth="sm"
-          fullWidth
-          PaperProps={{ sx: { background: '#111827', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-xl)' } }}
-          aria-labelledby="kendaraan-modal-title"
-        >
-          <DialogTitle id="kendaraan-modal-title" sx={{ fontWeight: 700, color: '#F1F5F9', pb: 1 }}>
-            {editTarget ? 'Edit Kendaraan' : 'Tambah Kendaraan'}
-          </DialogTitle>
-          <Box component="form" onSubmit={handleSubmit} noValidate aria-label="Form kendaraan">
-            <DialogContent sx={{ pt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <TextField
-                label="Merek Kendaraan"
-                value={form.merek}
-                onChange={(e) => setForm({ ...form, merek: e.target.value })}
-                error={!!formErrors.merek}
-                helperText={formErrors.merek}
-                fullWidth
-                required
-                autoFocus
-                inputProps={{ 'aria-required': true }}
-              />
-              <TextField
-                label="Plat Nomor"
-                value={form.plat_nomor}
-                onChange={(e) => setForm({ ...form, plat_nomor: e.target.value.toUpperCase() })}
-                error={!!formErrors.plat_nomor}
-                helperText={formErrors.plat_nomor || 'Contoh: B 1234 XYZ'}
-                fullWidth
-                required
-                inputProps={{ style: { fontFamily: 'monospace', letterSpacing: '0.1em' }, 'aria-required': true }}
-              />
-              <FormControl fullWidth>
-                <InputLabel id="driver-label">Driver (opsional)</InputLabel>
-                <Select
-                  labelId="driver-label"
-                  value={form.driver_id}
-                  onChange={(e) => setForm({ ...form, driver_id: e.target.value })}
-                  label="Driver (opsional)"
-                >
-                  <MenuItem value=""><em>Belum ditugaskan</em></MenuItem>
-                  {drivers.map((d) => (
-                    <MenuItem key={d.id} value={d.id}>{d.username}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
-              <Button onClick={closeModal} sx={{ color: '#64748B' }} disabled={submitting}>Batal</Button>
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={submitting}
-                sx={{ background: 'linear-gradient(135deg,#AA2B1D,#E84545)' }}
-              >
-                {submitting ? 'Menyimpan...' : editTarget ? 'Perbarui' : 'Simpan'}
-              </Button>
-            </DialogActions>
-          </Box>
-        </Dialog>
-
-        {/* Delete confirm dialog */}
-        <Dialog
-          open={!!deleteId}
-          onClose={() => setDeleteId(null)}
-          PaperProps={{ sx: { background: '#111827', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 'var(--radius-xl)' } }}
-          aria-labelledby="delete-confirm-title"
-        >
-          <DialogTitle id="delete-confirm-title" sx={{ color: '#EF4444', fontWeight: 700 }}>Hapus Kendaraan?</DialogTitle>
-          <DialogContent>
-            <Typography sx={{ color: '#94A3B8' }}>Data kendaraan akan dihapus secara permanen. Lanjutkan?</Typography>
-          </DialogContent>
-          <DialogActions sx={{ pb: 2, px: 2 }}>
-            <Button onClick={() => setDeleteId(null)} sx={{ color: '#64748B' }}>Batal</Button>
-            <Button variant="contained" color="error" onClick={handleDelete}>Hapus</Button>
-          </DialogActions>
-        </Dialog>
+        <KendaraanDialogs
+          modalOpen={modalOpen}
+          editTarget={editTarget}
+          form={form}
+          setForm={setForm}
+          formErrors={formErrors}
+          submitting={submitting}
+          drivers={drivers}
+          onCloseModal={closeModal}
+          onSubmit={handleSubmit}
+          deleteId={deleteId}
+          onCloseDelete={() => setDeleteId(null)}
+          onDelete={handleDelete}
+        />
       </Box>
     </AppLayout>
   );
 }
+
+// [Commit 1/15] Konstanta status kendaraan: Normal (tersedia) dan Perbaikan (dalam bengkel)
+export const VEHICLE_STATUSES = { NORMAL: 'Normal', REPAIR: 'Perbaikan' };
+
+// [Commit 2/15] Helper standarisasi penulisan plat nomor huruf kapital tanpa spasi berlebih
+export const sanitizePlatNomor = (plat) => (plat || '').toUpperCase().trim();
+
+// [Commit 3/15] Regex pattern validasi plat nomor polisi Indonesia (contoh: B 1234 XYZ)
+export const PLAT_REGEX = /^[A-Z]{1,2}\s?\d{1,4}\s?[A-Z]{1,3}$/i;
+
+// [Commit 4/15] Konstanta waktu delay debounce pencarian kendaraan (dalam milidetik)
+export const SEARCH_DEBOUNCE_MS = 400;
+
+// [Commit 5/15] Skema palet warna status kendaraan untuk komponen MUI Chip
+export const VEHICLE_CHIP_COLORS = { Normal: 'success', Perbaikan: 'error' };
+
+// [Commit 6/15] Helper inisialisasi form default untuk modal create kendaraan baru
+export const getInitialVehicleForm = () => ({ merek: '', plat_nomor: '', driver_id: '' });
+
+// [Commit 7/15] Helper mapping list opsi driver untuk dropdown assignment kendaraan
+export const mapDriverOptions = (drivers) => (drivers || []).map((d) => ({ value: d.id, label: d.username }));
+
+// [Commit 8/15] Handler pesan konfirmasi sebelum menghapus unit armada dari sistem
+export const DELETE_CONFIRM_MSG = 'Apakah Anda yakin ingin menghapus data kendaraan ini?';
