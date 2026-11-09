@@ -1,241 +1,36 @@
 import { createServer } from 'node:http';
-import { readFile, writeFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
+import { readDatabase } from './api/database.js';
+import { respond } from './api/http.js';
+import { handleVehicleRequest, vehicleRoute } from './api/vehicles.js';
+import { handleFuelRequest, fuelRoute } from './api/fuel.js';
+import { handleTowingRequest, towingRoute } from './api/towing.js';
 
-const dbPath = fileURLToPath(new URL('./db.json', import.meta.url));
 const port = Number(process.env.API_PORT || 3001);
-
-async function readDatabase() {
-  return JSON.parse(await readFile(dbPath, 'utf8'));
-}
-
-async function writeDatabase(database) {
-  await writeFile(dbPath, `${JSON.stringify(database, null, 2)}\n`);
-}
-
-function respond(response, status, data) {
-  response.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' });
-  response.end(JSON.stringify(data));
-}
-
-async function readRequestBody(request) {
-  let body = '';
-  for await (const chunk of request) {
-    body += chunk;
-    if (body.length > 2 * 1024 * 1024) {
-      const error = new Error('Ukuran request terlalu besar');
-      error.status = 413;
-      throw error;
-    }
-  }
-  try {
-    return JSON.parse(body);
-  } catch {
-    const error = new Error('Body harus berupa JSON yang valid');
-    error.status = 400;
-    throw error;
-  }
-}
+const routes = [
+  { pattern: vehicleRoute, handle: handleVehicleRequest },
+  { pattern: fuelRoute, handle: handleFuelRequest },
+  { pattern: towingRoute, handle: handleTowingRequest },
+];
 
 const server = createServer(async (request, response) => {
   try {
     const url = new URL(request.url, `http://${request.headers.host}`);
-    const vehicleRoute = url.pathname.match(/^\/api\/kendaraans(?:\/(\d+))?$/);
-    const fuelRoute = url.pathname.match(/^\/api\/bensin(?:\/(\d+))?(?:\/(cancel))?$/);
-    if (!vehicleRoute && !fuelRoute) {
+    const route = routes
+      .map((item) => ({ ...item, match: url.pathname.match(item.pattern) }))
+      .find((item) => item.match);
+
+    if (!route) {
       respond(response, 404, { message: 'Endpoint tidak ditemukan' });
       return;
     }
 
     const database = await readDatabase();
-
-    if (fuelRoute) {
-      const [, id, action] = fuelRoute;
-      const withRelations = (receipt) => ({
-        ...receipt,
-        driver: database.users.find((user) => user.id === receipt.driver_id) || null,
-        kendaraan: database.kendaraans.find((vehicle) => vehicle.id === receipt.kendaraan_id) || null,
-      });
-
-      if (request.method === 'GET' && !id && !action) {
-        const driverIdParam = url.searchParams.get('driver_id');
-        const driverId = Number(driverIdParam);
-        if (driverIdParam === null || !Number.isInteger(driverId)) {
-          respond(response, 400, { message: 'driver_id wajib diisi' });
-          return;
-        }
-        respond(response, 200, database.bensin
-          .filter((receipt) => receipt.driver_id === driverId)
-          .map(withRelations));
-        return;
-      }
-
-      if (request.method === 'POST' && !id && !action) {
-        const payload = await readRequestBody(request);
-        if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
-          respond(response, 400, { message: 'Body harus berupa object JSON' });
-          return;
-        }
-        const driverId = Number(payload.driver_id);
-        const vehicleId = Number(payload.kendaraan_id);
-        const nominal = Number(payload.nominal);
-        const driver = database.users.find((user) => user.id === driverId && user.role === 'Driver');
-        const vehicle = database.kendaraans.find((item) => item.id === vehicleId && item.driver_id === driverId);
-
-        if (!driver) {
-          respond(response, 400, { message: 'Driver tidak ditemukan' });
-          return;
-        }
-        if (!vehicle) {
-          respond(response, 400, { message: 'Kendaraan tidak ditemukan atau bukan milik driver ini' });
-          return;
-        }
-        if (!Number.isFinite(nominal) || nominal < 10000 || nominal > 5000000) {
-          respond(response, 400, { message: 'Nominal harus antara Rp 10.000 dan Rp 5.000.000' });
-          return;
-        }
-        if (payload.gambar != null
-          && (typeof payload.gambar !== 'string'
-            || payload.gambar.length > 1400000
-            || !/^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/]+=*$/.test(payload.gambar))) {
-          respond(response, 400, { message: 'Foto struk harus berupa gambar JPEG, PNG, atau WebP' });
-          return;
-        }
-
-        const receipt = {
-          id: Math.max(0, ...database.bensin.map((item) => item.id)) + 1,
-          driver_id: driverId,
-          kendaraan_id: vehicleId,
-          nominal,
-          gambar: payload.gambar || null,
-          status: 'Pending',
-          created_at: new Date().toISOString(),
-        };
-        database.bensin.push(receipt);
-        await writeDatabase(database);
-        respond(response, 201, withRelations(receipt));
-        return;
-      }
-
-      const receipt = database.bensin.find((item) => item.id === Number(id));
-      if (!receipt) {
-        respond(response, 404, { message: 'Struk bensin tidak ditemukan' });
-        return;
-      }
-
-      if (request.method === 'PATCH' && action === 'cancel') {
-        const driverId = Number(url.searchParams.get('driver_id'));
-        if (!Number.isInteger(driverId) || receipt.driver_id !== driverId) {
-          respond(response, 403, { message: 'Tidak dapat membatalkan struk milik driver lain' });
-          return;
-        }
-        if (receipt.status !== 'Pending') {
-          respond(response, 409, { message: 'Hanya struk berstatus Pending yang dapat dibatalkan' });
-          return;
-        }
-        receipt.status = 'Cancelled';
-        await writeDatabase(database);
-        respond(response, 200, withRelations(receipt));
-        return;
-      }
-
-      respond(response, 405, { message: 'Method tidak diizinkan' });
-      return;
-    }
-
-    const [, id] = vehicleRoute;
-    if (request.method === 'GET' && !id) {
-      const query = (url.searchParams.get('search') || '').toLocaleLowerCase();
-      const data = database.kendaraans
-        .filter((vehicle) => (
-          vehicle.merek.toLocaleLowerCase().includes(query)
-          || vehicle.plat_nomor.toLocaleLowerCase().includes(query)
-        ))
-        .map((vehicle) => ({
-          ...vehicle,
-          driver: database.users.find((user) => user.id === vehicle.driver_id) || null,
-        }));
-      respond(response, 200, data);
-      return;
-    }
-
-    if (request.method === 'POST' && !id) {
-      const payload = await readRequestBody(request);
-      if (typeof payload.merek !== 'string' || !payload.merek.trim()
-        || typeof payload.plat_nomor !== 'string' || !payload.plat_nomor.trim()) {
-        respond(response, 400, { message: 'Merek dan plat nomor wajib diisi' });
-        return;
-      }
-
-      const driverId = payload.driver_id ? Number(payload.driver_id) : null;
-      if (driverId !== null && !database.users.some((user) => user.id === driverId && user.role === 'Driver')) {
-        respond(response, 400, { message: 'Driver tidak ditemukan' });
-        return;
-      }
-
-      const vehicle = {
-        id: Math.max(0, ...database.kendaraans.map((item) => item.id)) + 1,
-        merek: payload.merek.trim(),
-        plat_nomor: payload.plat_nomor.trim(),
-        status: 'Normal',
-        driver_id: driverId,
-        gambar: null,
-        created_at: new Date().toISOString(),
-      };
-      database.kendaraans.push(vehicle);
-      await writeDatabase(database);
-      respond(response, 201, {
-        ...vehicle,
-        driver: database.users.find((user) => user.id === vehicle.driver_id) || null,
-      });
-      return;
-    }
-
-    const index = database.kendaraans.findIndex((vehicle) => vehicle.id === Number(id));
-    if (index === -1) {
-      respond(response, 404, { message: 'Kendaraan tidak ditemukan' });
-      return;
-    }
-
-    if (request.method === 'PUT') {
-      const payload = await readRequestBody(request);
-      if (typeof payload.merek !== 'string' || !payload.merek.trim()
-        || typeof payload.plat_nomor !== 'string' || !payload.plat_nomor.trim()) {
-        respond(response, 400, { message: 'Merek dan plat nomor wajib diisi' });
-        return;
-      }
-
-      const driverId = payload.driver_id ? Number(payload.driver_id) : null;
-      if (driverId !== null && !database.users.some((user) => user.id === driverId && user.role === 'Driver')) {
-        respond(response, 400, { message: 'Driver tidak ditemukan' });
-        return;
-      }
-
-      database.kendaraans[index] = {
-        ...database.kendaraans[index],
-        merek: payload.merek.trim(),
-        plat_nomor: payload.plat_nomor.trim(),
-        driver_id: driverId,
-      };
-      await writeDatabase(database);
-      respond(response, 200, {
-        ...database.kendaraans[index],
-        driver: database.users.find((user) => user.id === driverId) || null,
-      });
-      return;
-    }
-
-    if (request.method === 'DELETE') {
-      database.kendaraans.splice(index, 1);
-      await writeDatabase(database);
-      respond(response, 200, { message: 'Kendaraan berhasil dihapus' });
-      return;
-    }
-
-    respond(response, 405, { message: 'Method tidak diizinkan' });
+    await route.handle(request, response, url, database, route.match);
   } catch (error) {
     console.error('API error:', error);
-    respond(response, error.status || 500, { message: error.status ? error.message : 'Terjadi kesalahan pada server API' });
+    respond(response, error.status || 500, {
+      message: error.status ? error.message : 'Terjadi kesalahan pada server API',
+    });
   }
 });
 

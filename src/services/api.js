@@ -2,7 +2,7 @@
 import axios from 'axios';
 import {
   mockUsers, mockKerusakans, mockBillPerbaikan,
-  mockTowings, mockDashboardStats, mockChartData,
+  mockDashboardStats, mockChartData,
   mockRecentActivities,
 } from '../data/mockData';
 
@@ -144,19 +144,11 @@ export const bensinService = {
 };
 
 export const towingService = {
-  getAll: () => mockFetch(mockTowings),
-  create: async (payload) => {
-    await delay(700);
-    const newItem = { ...payload, id: Date.now(), status: 'Pending', created_at: new Date().toISOString() };
-    mockTowings.push(newItem);
-    return { data: newItem, status: 201 };
-  },
-  cancel: async (id) => {
-    await delay(600);
-    const idx = mockTowings.findIndex((t) => t.id === id);
-    if (idx !== -1) mockTowings[idx].status = 'Cancelled';
-    return { data: { message: 'Cancelled' }, status: 200 };
-  },
+  getAll: (params) => apiClient.get('/towing', { params }),
+  create: (payload) => apiClient.post('/towing', payload),
+  cancel: (id, driverId) => apiClient.patch(`/towing/${id}/cancel`, null, {
+    params: { driver_id: driverId },
+  }),
 };
 
 export const billService = {

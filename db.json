@@ -82,5 +82,16 @@
       "status": "Diterima",
       "created_at": "2025-10-29T08:00:00Z"
     }
+  ],
+  "towing": [
+    {
+      "id": 1,
+      "driver_id": 3,
+      "kendaraan_id": 2,
+      "lokasi": "Jl. Sudirman No. 45, Jakarta Pusat",
+      "status": "Pending",
+      "catatan": "Kendaraan mogok tidak bisa distarter",
+      "created_at": "2025-10-28T10:00:00Z"
+    }
   ]
 }

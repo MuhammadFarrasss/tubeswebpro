@@ -99,14 +99,16 @@ npm install
 # Jalankan development server
 npm run dev
 
-# Di terminal terpisah, jalankan API dummy kendaraan dan struk bensin
+# Di terminal terpisah, jalankan API dummy kendaraan, bensin, dan towing
 npm run api
 ```
 
 Aplikasi akan berjalan di: **http://localhost:5173**
-Dummy API kendaraan berjalan di **http://localhost:3001/api/kendaraans** dan API struk bensin di **http://localhost:3001/api/bensin**. Data disimpan di `db.json`.
+Dummy API kendaraan berjalan di **http://localhost:3001/api/kendaraans**, struk bensin di **http://localhost:3001/api/bensin**, dan towing di **http://localhost:3001/api/towing**. Data disimpan di `db.json`.
 
+Router HTTP ada di `api-server.js`; handler endpoint dipisah ke `api/vehicles.js`, `api/fuel.js`, dan `api/towing.js`. Helper database dan HTTP ada di `api/database.js` serta `api/http.js`.
 Endpoint struk bensin: `GET /api/bensin?driver_id=<id>`, `POST /api/bensin`, dan `PATCH /api/bensin/<id>/cancel?driver_id=<id>`. Foto struk menerima JPEG, PNG, atau WebP hingga 1 MB.
+Endpoint towing: `GET /api/towing?driver_id=<id>`, `POST /api/towing`, dan `PATCH /api/towing/<id>/cancel?driver_id=<id>`. Lokasi harus 10–300 karakter dan catatan maksimal 250 karakter.
 
 Untuk konfigurasi lain, salin `.env.example` ke `.env` lalu ubah `VITE_API_BASE_URL` atau `VITE_API_TARGET` sesuai kebutuhan.
 
