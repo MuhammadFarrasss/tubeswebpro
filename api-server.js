@@ -4,12 +4,16 @@ import { respond } from './api/http.js';
 import { handleVehicleRequest, vehicleRoute } from './api/vehicles.js';
 import { handleFuelRequest, fuelRoute } from './api/fuel.js';
 import { handleTowingRequest, towingRoute } from './api/towing.js';
+import { handleRepairRequest, repairRoute } from './api/repairs.js';
+import { handleBillRequest, billRoute } from './api/bills.js';
 
 const port = Number(process.env.API_PORT || 3001);
 const routes = [
   { pattern: vehicleRoute, handle: handleVehicleRequest },
   { pattern: fuelRoute, handle: handleFuelRequest },
   { pattern: towingRoute, handle: handleTowingRequest },
+  { pattern: repairRoute, handle: handleRepairRequest },
+  { pattern: billRoute, handle: handleBillRequest },
 ];
 
 const server = createServer(async (request, response) => {

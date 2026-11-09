@@ -1,7 +1,7 @@
 // API service layer - semua fetch via axios sesuai spesifikasi
 import axios from 'axios';
 import {
-  mockUsers, mockKerusakans, mockBillPerbaikan,
+  mockUsers,
   mockDashboardStats, mockChartData,
   mockRecentActivities,
 } from '../data/mockData';
@@ -101,38 +101,16 @@ export const userService = {
 };
 
 export const kerusakanService = {
-  getAll: (params = {}) => {
-    let data = [...mockKerusakans];
-    if (params.status) data = data.filter((k) => k.status === params.status);
-    return mockFetch(data);
-  },
-  getByDriver: (driverId) => mockFetch(mockKerusakans.filter((k) => k.driver?.username !== undefined)),
-  approve: async (id, mekanikId) => {
-    await delay(700);
-    const idx = mockKerusakans.findIndex((k) => k.id === id);
-    if (idx === -1) throw new Error('Data tidak ditemukan');
-    const mekanik = mockUsers.find((u) => u.id === mekanikId);
-    mockKerusakans[idx] = { ...mockKerusakans[idx], is_accept: true, status: 'Perbaikan', mekanik_id: mekanikId, mekanik };
-    return { data: mockKerusakans[idx], status: 200 };
-  },
-  create: async (payload) => {
-    await delay(700);
-    const newItem = { ...payload, id: Date.now(), is_accept: false, status: 'Pending', created_at: new Date().toISOString() };
-    mockKerusakans.push(newItem);
-    return { data: newItem, status: 201 };
-  },
-  cancel: async (id) => {
-    await delay(600);
-    const idx = mockKerusakans.findIndex((k) => k.id === id);
-    if (idx !== -1) mockKerusakans[idx].status = 'Cancelled';
-    return { data: { message: 'Cancelled' }, status: 200 };
-  },
-  markAsPending: async (id) => {
-    await delay(600);
-    const idx = mockKerusakans.findIndex((k) => k.id === id);
-    if (idx !== -1) mockKerusakans[idx].status = 'Perbaikan';
-    return { data: mockKerusakans[idx], status: 200 };
-  },
+  getAll: (params = {}) => apiClient.get('/kerusakan', { params }),
+  getByDriver: (driverId) => apiClient.get('/kerusakan', { params: { driver_id: driverId } }),
+  create: (payload) => apiClient.post('/kerusakan', payload),
+  approve: (id, mekanikId) => apiClient.patch(`/kerusakan/${id}/approve`, { mekanik_id: mekanikId }),
+  cancel: (id, driverId) => apiClient.patch(`/kerusakan/${id}/cancel`, null, {
+    params: { driver_id: driverId },
+  }),
+  complete: (id, mekanikId) => apiClient.patch(`/kerusakan/${id}/complete`, null, {
+    params: { mekanik_id: mekanikId },
+  }),
 };
 
 export const bensinService = {
@@ -152,13 +130,8 @@ export const towingService = {
 };
 
 export const billService = {
-  getAll: () => mockFetch(mockBillPerbaikan),
-  create: async (payload) => {
-    await delay(700);
-    const newItem = { ...payload, id: Date.now(), created_at: new Date().toISOString() };
-    mockBillPerbaikan.push(newItem);
-    return { data: newItem, status: 201 };
-  },
+  getAll: () => apiClient.get('/bills'),
+  create: (payload) => apiClient.post('/bills', payload),
 };
 
 // External API call example (JSONPlaceholder) - sesuai spesifikasi "Public API"
