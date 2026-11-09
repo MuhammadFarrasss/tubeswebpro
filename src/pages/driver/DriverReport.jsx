@@ -39,11 +39,11 @@ export default function DriverReport() {
     try {
       const [k, kr] = await Promise.all([
         kendaraanService.getAll(),
-        kerusakanService.getAll(),
+        kerusakanService.getByDriver(user.id),
       ]);
-      setKendaraan(k.data[0] || null);
+      setKendaraan(k.data.find((vehicle) => Number(vehicle.driver_id) === Number(user.id)) || null);
       setKerusakans(kr.data);
-    } catch { setError('Gagal memuat data'); }
+    } catch (err) { setError(err.message || 'Gagal memuat data laporan'); }
     finally { setLoading(false); }
   };
 
@@ -67,9 +67,8 @@ export default function DriverReport() {
     try {
       await kerusakanService.create({
         ...form,
-        kendaraan_id: kendaraan?.id,
-        kendaraan: { merek: kendaraan?.merek, plat_nomor: kendaraan?.plat_nomor },
-        driver: { username: user?.username },
+        kendaraan_id: kendaraan.id,
+        driver_id: user.id,
       });
       toast.success('Laporan berhasil dikirim!');
       setFormOpen(false);
@@ -82,10 +81,10 @@ export default function DriverReport() {
   const handleCancel = async (id) => {
     if (!window.confirm('Batalkan pengajuan ini?')) return;
     try {
-      await kerusakanService.cancel(id);
+      await kerusakanService.cancel(id, user.id);
       toast.success('Pengajuan dibatalkan');
       fetchData();
-    } catch { toast.error('Gagal membatalkan'); }
+    } catch (err) { toast.error(err.message || 'Gagal membatalkan laporan'); }
   };
 
   return (
@@ -96,10 +95,16 @@ export default function DriverReport() {
             <Typography component="h1" variant="h4" fontWeight={800} sx={{ color: '#F1F5F9', mb: 0.5 }}>Laporan Kerusakan</Typography>
             <Typography variant="body2" sx={{ color: 'var(--color-text-secondary)' }}>Ajukan laporan kerusakan kendaraan Anda</Typography>
           </Box>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => { setFormOpen(true); setFormErrors({}); setForm({ catatan: '', kendala: [] }); }} aria-label="Buat laporan kerusakan baru" sx={{ background: 'linear-gradient(135deg,#AA2B1D,#E84545)', flexShrink: 0 }}>
+          <Button variant="contained" startIcon={<AddIcon />} onClick={() => { setFormOpen(true); setFormErrors({}); setForm({ catatan: '', kendala: [] }); }} disabled={!kendaraan || loading} aria-label="Buat laporan kerusakan baru" sx={{ background: 'linear-gradient(135deg,#AA2B1D,#E84545)', flexShrink: 0 }}>
             Buat Laporan
           </Button>
         </Box>
+
+        {!loading && !error && !kendaraan && (
+          <Box role="alert" sx={{ p: 2, mb: 3, borderRadius: 'var(--radius-md)', color: '#FCD34D', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.25)' }}>
+            Akun Anda belum memiliki kendaraan yang ditugaskan. Hubungi admin sebelum membuat laporan.
+          </Box>
+        )}
 
         {loading && <LoadingSkeleton rows={4} height={100} />}
         {error   && <ErrorState message={error} onRetry={fetchData} />}
@@ -166,7 +171,7 @@ export default function DriverReport() {
                 helperText={formErrors.catatan}
                 fullWidth required
                 placeholder="Jelaskan kerusakan yang terjadi..."
-                inputProps={{ 'aria-required': true }}
+                inputProps={{ maxLength: 1000, 'aria-required': true }}
               />
 
               {/* Tambah kendala */}

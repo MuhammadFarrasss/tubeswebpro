@@ -1,0 +1,173 @@
+{
+  "users": [
+    {
+      "id": 2,
+      "username": "budi_driver",
+      "role": "Driver"
+    },
+    {
+      "id": 3,
+      "username": "andi_driver",
+      "role": "Driver"
+    },
+    {
+      "id": 6,
+      "username": "deni_driver",
+      "role": "Driver"
+    },
+    {
+      "id": 4,
+      "username": "rizki_mekanik",
+      "role": "Mekanik"
+    },
+    {
+      "id": 5,
+      "username": "sani_mekanik",
+      "role": "Mekanik"
+    }
+  ],
+  "kendaraans": [
+    {
+      "id": 1,
+      "merek": "Toyota Avanza",
+      "plat_nomor": "B 1234 XYZ",
+      "status": "Perbaikan",
+      "driver_id": 2,
+      "gambar": null,
+      "created_at": "2025-01-20"
+    },
+    {
+      "id": 2,
+      "merek": "Honda HRV",
+      "plat_nomor": "D 5678 ABC",
+      "status": "Perbaikan",
+      "driver_id": 3,
+      "gambar": null,
+      "created_at": "2025-01-22"
+    },
+    {
+      "id": 3,
+      "merek": "Mitsubishi Pajero",
+      "plat_nomor": "B 9012 DEF",
+      "status": "Normal",
+      "driver_id": 6,
+      "gambar": null,
+      "created_at": "2025-01-25"
+    },
+    {
+      "id": 4,
+      "merek": "Isuzu Panther",
+      "plat_nomor": "F 3456 GHI",
+      "status": "Normal",
+      "driver_id": null,
+      "gambar": null,
+      "created_at": "2025-02-01"
+    },
+    {
+      "id": 5,
+      "merek": "Daihatsu",
+      "plat_nomor": "B 4567 AAW",
+      "status": "Normal",
+      "driver_id": 2,
+      "gambar": null,
+      "created_at": "2026-11-09T04:13:07.752Z"
+    }
+  ],
+  "bensin": [
+    {
+      "id": 1,
+      "driver_id": 2,
+      "kendaraan_id": 1,
+      "nominal": 300000,
+      "gambar": null,
+      "status": "Pending",
+      "created_at": "2025-10-30T07:45:00Z"
+    },
+    {
+      "id": 2,
+      "driver_id": 6,
+      "kendaraan_id": 3,
+      "nominal": 450000,
+      "gambar": null,
+      "status": "Diterima",
+      "created_at": "2025-10-29T08:00:00Z"
+    }
+  ],
+  "towing": [
+    {
+      "id": 1,
+      "driver_id": 3,
+      "kendaraan_id": 2,
+      "lokasi": "Jl. Sudirman No. 45, Jakarta Pusat",
+      "status": "Pending",
+      "catatan": "Kendaraan mogok tidak bisa distarter",
+      "created_at": "2025-10-28T10:00:00Z"
+    }
+  ],
+  "kerusakans": [
+    {
+      "id": 1,
+      "driver_id": 2,
+      "kendaraan_id": 1,
+      "mekanik_id": 4,
+      "status": "Perbaikan",
+      "is_accept": true,
+      "catatan": "Mesin overheat, perlu penggantian thermostat dan radiator flush",
+      "kendala": [
+        { "name": "Overheating", "description": "Suhu mesin melebihi normal" },
+        { "name": "Radiator bocor", "description": "Terdapat kebocoran kecil di selang radiator" }
+      ],
+      "gambar": null,
+      "created_at": "2025-10-15T08:30:00Z"
+    },
+    {
+      "id": 2,
+      "driver_id": 3,
+      "kendaraan_id": 2,
+      "mekanik_id": null,
+      "status": "Pending",
+      "is_accept": false,
+      "catatan": "Ban kempes dan lampu sein kanan mati",
+      "kendala": [
+        { "name": "Ban kempes", "description": "Ban belakang kiri bocor" },
+        { "name": "Lampu sein mati", "description": "Lampu sein kanan depan tidak berfungsi" }
+      ],
+      "gambar": null,
+      "created_at": "2025-10-28T09:15:00Z"
+    },
+    {
+      "id": 3,
+      "driver_id": 6,
+      "kendaraan_id": 3,
+      "mekanik_id": 5,
+      "status": "Normal",
+      "is_accept": true,
+      "catatan": "AC tidak dingin",
+      "kendala": [
+        { "name": "AC rusak", "description": "Kompresor AC bermasalah" }
+      ],
+      "gambar": null,
+      "created_at": "2025-10-20T14:00:00Z"
+    }
+  ],
+  "bills": [
+    {
+      "id": 1,
+      "kerusakan_id": 1,
+      "mekanik_id": 4,
+      "nominal": 2500000,
+      "deskripsi": "Penggantian thermostat + radiator flush + jasa servis",
+      "gambar": null,
+      "created_at": "2025-10-18T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "kerusakan_id": 3,
+      "mekanik_id": 5,
+      "nominal": 1800000,
+      "deskripsi": "Service kompresor AC + pengisian freon",
+      "gambar": null,
+      "created_at": "2025-10-22T11:30:00Z"
+    }
+  ]
+}
