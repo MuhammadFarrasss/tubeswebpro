@@ -1,9 +1,5 @@
 // API service layer - semua fetch via axios sesuai spesifikasi
 import axios from 'axios';
-import {
-  mockDashboardStats, mockChartData,
-  mockRecentActivities,
-} from '../data/mockData';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
@@ -14,15 +10,6 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject(new Error(error.response?.data?.message || error.message))
 );
-
-// Simulate network delay untuk realistic UX
-const delay = (ms = 600) => new Promise((res) => setTimeout(res, ms));
-
-// Generic mock fetcher yang mengemulasi axios response shape
-const mockFetch = async (data, ms = 600) => {
-  await delay(ms);
-  return { data, status: 200 };
-};
 
 const AUTH_STORE_KEY = 'sagara_auth';
 
@@ -50,9 +37,7 @@ export const authService = {
 };
 
 export const dashboardService = {
-  getStats: () => mockFetch(mockDashboardStats),
-  getChartData: () => mockFetch(mockChartData),
-  getRecentActivities: () => mockFetch(mockRecentActivities),
+  getOverview: () => apiClient.get('/dashboard'),
 };
 
 export const kendaraanService = {

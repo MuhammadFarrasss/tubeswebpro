@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../../components/AppLayout';
-import { dashboardService, kendaraanService } from '../../services/api';
+import { dashboardService } from '../../services/api';
 import { LoadingSkeleton, ErrorState } from '../../components/StateComponents';
 import {
   Box, Typography, Grid, Card, CardContent, Chip,
@@ -33,14 +33,10 @@ export default function AdminDashboard() {
     setLoading(true);
     setError('');
     try {
-      const [s, c, a] = await Promise.all([
-        dashboardService.getStats(),
-        dashboardService.getChartData(),
-        dashboardService.getRecentActivities(),
-      ]);
-      setStats(s.data);
-      setChartData(c.data);
-      setActivities(a.data);
+      const { data } = await dashboardService.getOverview();
+      setStats(data.stats);
+      setChartData(data.chartData);
+      setActivities(data.activities);
     } catch (e) {
       setError('Gagal memuat data dashboard');
     } finally {
