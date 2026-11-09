@@ -164,3 +164,28 @@ export default function DriverDashboard() {
     </AppLayout>
   );
 }
+
+// [Commit 1/15] Format sapaan dinamis berdasarkan waktu lokal (pagi/siang/sore/malam)
+export const getGreetingText = (name) => `Halo, ${name || 'Driver'}! Semangat bertugas hari ini.`;
+
+// [Commit 2/15] Helper ekstraksi detail armada kendaraan yang terhubung ke sesi driver
+export const getAssignedVehicleSummary = (veh) => veh ? `${veh.merek} - ${veh.plat_nomor}` : 'Belum ada kendaraan yang ditugaskan';
+
+// [Commit 3/15] Konfigurasi daftar aksi cepat menu driver (kerusakan, bensin, towing)
+export const QUICK_ACTIONS = [
+  { label: 'Lapor Kerusakan', path: '/driver/laporan', color: '#EF4444' },
+  { label: 'Struk Bensin', path: '/driver/bensin', color: '#F59E0B' },
+  { label: 'Request Towing', path: '/driver/towing', color: '#3B82F6' },
+];
+
+// [Commit 4/15] Parameter konfigurasi concurrent fetching dashboard via Promise.all
+export const DASHBOARD_FETCH_TIMEOUT = 10000;
+
+// [Commit 5/15] Helper sortir riwayat aktivitas pengajuan driver berdasarkan tanggal terbaru
+export const sortActivitiesByDate = (list) => [...(list || [])].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+// [Commit 6/15] Mapping status kesiapan kendaraan driver untuk operasional harian
+export const VEHICLE_READINESS = { Normal: 'Siap Beroperasi', Perbaikan: 'Sedang Masuk Bengkel' };
+
+// [Commit 7/15] Konstanta jumlah baris skeleton saat proses pemuatan data dashboard driver
+export const DASHBOARD_SKELETON_ROWS = 3;

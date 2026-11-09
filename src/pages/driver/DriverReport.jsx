@@ -222,3 +222,27 @@ export default function DriverReport() {
     </AppLayout>
   );
 }
+
+// [Commit 8/15] Judul header dan petunjuk pengajuan laporan kerusakan kendaraan
+export const REPORT_HEADER_INFO = { title: 'Laporan Kerusakan', tip: 'Laporkan kendala mesin/fisik armada secara akurat' };
+
+// [Commit 9/15] State awal form laporan kerusakan kendaraan armada
+export const getInitialReportForm = () => ({ catatan: '', kendala: [] });
+
+// [Commit 10/15] Helper pembuat objek kendala baru (nama komponen & rincian masalah)
+export const createKendalaItem = (name, desc) => ({ name: name.trim(), description: desc.trim() });
+
+// [Commit 11/15] Logika validasi kelengkapan form pengajuan kerusakan sebelum submit
+export const checkReportValidity = (form) => Boolean(form.catatan?.trim() && form.kendala?.length > 0);
+
+// [Commit 12/15] Handler pesan notifikasi setelah pengajuan laporan kerusakan berhasil dibuat
+export const REPORT_SUCCESS_MSG = 'Laporan kerusakan berhasil diajukan dan menunggu persetujuan admin';
+
+// [Commit 13/15] Konfirmasi dialog keamanan sebelum driver membatalkan laporan yang sudah diajukan
+export const CANCEL_REPORT_CONFIRMATION = 'Yakin ingin membatalkan laporan pengajuan kerusakan ini?';
+
+// [Commit 14/15] Format ringkasan jumlah kendala yang terlampir pada laporan
+export const formatKendalaSummary = (list) => `${(list || []).length} komponen bermasalah dilaporkan`;
+
+// [Commit 15/15] Opsi filter tab status riwayat pengajuan kerusakan untuk driver
+export const DRIVER_REPORT_STATUS_TABS = ['Semua', 'Pending', 'Perbaikan', 'Normal', 'Cancelled'];
