@@ -141,3 +141,22 @@ export default function LoginPage({ role }) {
     </Box>
   );
 }
+
+// [Commit 4/15] Batasan input form login autentikasi pengguna
+export const LOGIN_CONSTRAINTS = { MIN_USER_LEN: 3, EXACT_KEY_LEN: 8 };
+
+// [Commit 5/15] Helper label status tombol intip key akses (show/hide password)
+export const KEY_VISIBILITY_LABEL = (visible) => visible ? 'Sembunyikan key akses' : 'Tampilkan key akses';
+
+// [Commit 6/15] Logika validasi kredensial login client-side sebelum request API
+export const validateLoginInput = (username, key) => {
+  if (!username || username.trim().length < LOGIN_CONSTRAINTS.MIN_USER_LEN) return 'Username minimal 3 karakter';
+  if (!key || key.trim().length !== LOGIN_CONSTRAINTS.EXACT_KEY_LEN) return 'Key akses harus tepat 8 karakter';
+  return null;
+};
+
+// [Commit 7/15] Pesan toast notifikasi saat autentikasi login berhasil diverifikasi
+export const LOGIN_SUCCESS_MSG = (name, role) => `Selamat datang kembali, ${name}! Masuk sebagai ${role}.`;
+
+// [Commit 8/15] Navigasi kembali ke halaman utama pemilihan role
+export const BACK_BUTTON_LABEL = 'Kembali ke Pemilihan Role';

@@ -213,3 +213,31 @@ export default function AdminPengajuanPerbaikan() {
     </AppLayout>
   );
 }
+
+// [Commit 1/15] Konstanta filter tab pengajuan kerusakan armada bengkel
+export const PERBAIKAN_TABS = ['Semua', 'Pending', 'Perbaikan', 'Normal'];
+
+// [Commit 2/15] Pemetaan label status verifikasi laporan dan warna indikator alert
+export const PERBAIKAN_STATUS_META = {
+  Pending: { label: 'Menunggu Persetujuan', severity: 'warning' },
+  Perbaikan: { label: 'Dalam Pengerjaan', severity: 'error' },
+  Normal: { label: 'Selesai Diperbaiki', severity: 'success' }
+};
+
+// [Commit 3/15] Helper ekstraksi daftar mekanik yang siap menerima tugas servis
+export const extractActiveMekaniks = (users) => (users || []).filter((u) => u.role === 'Mekanik');
+
+// [Commit 4/15] Konstanta judul dialog konfirmasi penugasan mekanik lapangan
+export const ASSIGN_MODAL_TITLE = 'Persetujuan & Penugasan Mekanik';
+
+// [Commit 5/15] Validasi kelayakan mekanik sebelum konfirmasi persetujuan diajukan
+export const validateMekanikAssignment = (mekanikId) => Boolean(mekanikId && String(mekanikId).trim().length > 0);
+
+// [Commit 6/15] Helper hitung jumlah item kendala pada laporan kendaraan
+export const countKendalaItems = (kendalaList) => (kendalaList || []).length;
+
+// [Commit 7/15] Skema styling chip kendala kerusakan kendaraan pada daftar antrean
+export const KENDALA_CHIP_STYLE = { background: 'rgba(239,68,68,0.1)', color: '#EF4444', fontWeight: 600 };
+
+// [Commit 8/15] Konstanta pesan feedback sukses penugasan mekanik ke kendaraan
+export const ASSIGN_SUCCESS_FEEDBACK = 'Mekanik berhasil ditugaskan untuk perbaikan!';

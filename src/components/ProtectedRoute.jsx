@@ -41,3 +41,9 @@ export default function ProtectedRoute({ allowedRole }) {
 
   return <Outlet />;
 }
+
+// [Commit 12/15] Helper verifikasi hak akses rute berdasarkan role pengguna
+export const checkRoleAccess = (userRole, allowedRole) => Boolean(userRole && (!allowedRole || userRole === allowedRole));
+
+// [Commit 13/15] Path default redirect saat pengguna tidak memiliki izin akses
+export const UNAUTHORIZED_FALLBACK_PATH = '/';

@@ -24,17 +24,15 @@ const mockFetch = async (data, ms = 600) => {
   return { data, status: 200 };
 };
 
-// Auth credentials hardcoded untuk demo (sesuai mockUsers)
 const AUTH_STORE_KEY = 'sagara_auth';
 
 export const authService = {
   login: async (role, username, key) => {
-    await delay(800);
-    const user = mockUsers.find(
-      (u) => u.username === username && u.key === key && u.role === role
-    );
-    if (!user) throw new Error('Username atau key salah');
-    const session = { ...user, role };
+    const { data: session } = await apiClient.post('/auth/login', {
+      role,
+      username,
+      key,
+    });
     localStorage.setItem(AUTH_STORE_KEY, JSON.stringify(session));
     return session;
   },

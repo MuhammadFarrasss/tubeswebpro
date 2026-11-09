@@ -36,3 +36,12 @@ export const useAuth = () => {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 };
+
+// [Commit 9/15] Konstanta kunci penyimpanan token sesi di browser localStorage
+export const STORAGE_SESSION_KEY = 'sagara_session';
+
+// [Commit 10/15] Helper pengecekan status login aktif pengguna dari sesi lokal
+export const isSessionActive = (session) => Boolean(session && session.username && session.role);
+
+// [Commit 11/15] Helper sanitasi format nama peran pengguna (huruf kapital di awal)
+export const formatUserRole = (role) => (role ? role.charAt(0).toUpperCase() + role.slice(1).toLowerCase() : '');
